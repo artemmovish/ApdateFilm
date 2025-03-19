@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ApdateFilmUser.Views.AuthViews.AuthPage"
+             Title="AuthPage">
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#02396C" Offset="0.0" />
+                <GradientStop Color="#046FD2" Offset="1" />
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Frame VerticalOptions="Center" HorizontalOptions="Center"
+               BackgroundColor="#CC000000">
+            <StackLayout WidthRequest="310" Spacing="20">
+                <Label Text="Sign In" FontAttributes="Bold"
+                       TextColor="White" FontSize="25"/>
+                <Frame CornerRadius="10" Padding="5"
+                       BackgroundColor="#4DC5C5C5">
+                    <Entry Text=""
+                           Placeholder="Email"/>
+                </Frame>
+                <Frame CornerRadius="10" Padding="5"
+                       BackgroundColor="#4DC5C5C5">
+                    <Entry Text="" 
+                           Placeholder="Password"/>
+                </Frame>
+                <Button Text="Sign In" FontAttributes="Bold"
+                        Background="#046FD2"/>
+                <StackLayout Orientation="Horizontal"
+                             HorizontalOptions="Center">
+                    <Label Text="You are a new user? " TextColor="White" FontSize="12"/>
+                    <Label>
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Sign Up" 
+                                      FontAttributes="Bold" 
+                                      TextColor="White" 
+                                      FontSize="12"
+                                      TextDecorations="Underline" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </StackLayout>
+            </StackLayout>
+        </Frame>
+    </Grid>
+</ContentPage>
