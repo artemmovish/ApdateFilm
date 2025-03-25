@@ -2,6 +2,7 @@
 using ApdateFilmUser.Services.API;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -15,21 +16,26 @@ namespace ApdateFilmUser.Servieces
         {
             try
             {
-                var mediaResponse = await ApdateFilmUserClient.GetAsync("ApdateFilmUser/media");
+                var mediaResponse = await ApiClient.GetAsync("api/media");
 
                 if (String.IsNullOrEmpty(mediaResponse))
                 {
-                    Console.WriteLine("Ответ от сервера пустой");
+                    Debug.WriteLine("Ответ от сервера пустой");
                     return null;
                 }
 
-                var mediaListResponse = JsonSerializer.Deserialize<List<Media>>(mediaResponse, ApdateFilmUserClient.options);
+                var mediaListResponse = JsonSerializer.Deserialize<List<Media>>(mediaResponse, ApiClient.options);
+
+                foreach (var media in mediaListResponse)
+                {
+                    media.Preview = $"{ApiClient.GetURL()}/storage/{media.Preview}";
+                }
 
                 return mediaListResponse;
             }
             catch (Exception ex)
             {
-                ApdateFilmUserClient.HandleException(ex);
+                ApiClient.HandleException(ex);
             }
 
             return null;

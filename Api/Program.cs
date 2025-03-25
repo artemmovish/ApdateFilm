@@ -10,9 +10,9 @@ User user;
 //var userResponse = await AuthServiec.AuthAsync(user);
 //Console.WriteLine(userResponse);
 
-//user = new User("Console@api.com", "12345678");
-//user = await AuthServiec.LoginAsync(user);
-//Console.WriteLine(user);
+user = new User("Console@api.com", "12345678");
+user = await AuthServiec.LoginAsync(user);
+Console.WriteLine(user);
 
 var mediaList = await MediaServiec.GetMediaAsync();
 

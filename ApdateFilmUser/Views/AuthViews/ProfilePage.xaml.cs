@@ -1,5 +1,6 @@
 
 using ApdateFilmUser.Services.API;
+using ApdateFilmUser.ViewModels.AuthViewModels;
 
 namespace ApdateFilmUser.Views.AuthViews;
 
@@ -14,10 +15,15 @@ public partial class ProfilePage : ContentPage
     {
         base.OnAppearing();
 
-        if (String.IsNullOrEmpty(ApdateFilmUserClient.GetToken()))
+        if (String.IsNullOrEmpty(ApiClient.GetToken()))
         {
             // Если пользователь не авторизован, перенаправляем на страницу авторизации
             await Shell.Current.GoToAsync("auth");
+        }
+        else
+        {
+            var vm = (ProfileViewModel)BindingContext;
+            await vm.LoadProfile();
         }
     }
 }

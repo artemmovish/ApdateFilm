@@ -19,7 +19,7 @@ namespace ApdateFilmUser.Models
         public int Duration { get; set; }
         public DateTime Release { get; set; }
         public string Rating { get; set; }
-        public int Episodes { get; set; }
+        public int? Episodes { get; set; }
         public string Preview { get; set; }
         public string ContentURL { get; set; }
         public List<Genre> Genres { get; set; }

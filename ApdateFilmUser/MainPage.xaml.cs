@@ -1,4 +1,6 @@
-﻿namespace ApdateFilmUser
+﻿using ApdateFilmUser.Services.API;
+
+namespace ApdateFilmUser
 {
     public partial class MainPage : ContentPage
     {

@@ -7,13 +7,12 @@
     xmlns:view="clr-namespace:ApdateFilmUser.Views"
     xmlns:authview="clr-namespace:ApdateFilmUser.Views.AuthViews"
     Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarIsVisible="False"
     Title="ApdateFilmUser">
-
-
 
     <TabBar>
         <ShellContent 
-            Icon="images//menu.png"
+            Icon="catalog.png"
             Title="Меню"
             ContentTemplate="{DataTemplate view:CatalogPage }"/>
         <ShellContent 
@@ -21,7 +20,7 @@
             Title="Профиль"
             ContentTemplate="{DataTemplate authview:ProfilePage }"/>
         <ShellContent 
-            Icon="images//card.png"
+            Icon="favorites.png"
             Title="Корзина"
             ContentTemplate="{DataTemplate view:FavoritesPage }"/>
     </TabBar>
