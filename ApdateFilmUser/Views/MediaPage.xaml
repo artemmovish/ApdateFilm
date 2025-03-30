@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ApdateFilmUser.Views.MediaPage"
+             Title="MediaPage">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#02396C" Offset="0.0" />
+            <GradientStop Color="#046FD2" Offset="1" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="10">
+            <!-- Изображение фильма (заменено на WebView) -->
+            <WebView Source="{Binding ContentURL}"
+             HeightRequest="200" />
+
+            <!-- Заголовок (без Frame) -->
+            <VerticalStackLayout Padding="10">
+                <Label Text="{Binding Name}"
+               FontSize="24"
+               FontAttributes="Bold"
+               TextColor="White" />
+                <Label Text="{Binding Release, StringFormat='{0:yyyy}'}"
+               FontSize="18"
+               TextColor="White" />
+            </VerticalStackLayout>
+
+            <!-- Описание (без Frame) -->
+            <Label Text="{Binding Description}"
+           FontSize="14"
+           TextColor="White"
+           Padding="10" />
+
+            <!-- Дополнительная информация (без Frame) -->
+            <VerticalStackLayout Padding="10">
+                <Label Text="Жанр: Боевик"
+               FontSize="16"
+               TextColor="White" />
+                <Label Text="Год производства: 2021"
+               FontSize="16"
+               TextColor="White" />
+                <Label Text="Страна: Ирландия"
+               FontSize="16"
+               TextColor="White" />
+            </VerticalStackLayout>
+
+            <!-- Кнопка воспроизведения -->
+            <Button Text="Воспроизвести"
+            BackgroundColor="#2563EB"
+            TextColor="White"
+            FontSize="18"
+            CornerRadius="10"
+            Margin="20,10" />
+
+            <!-- Нижние элементы -->
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                <WebView Source="https://example.com/favorite_icon.png"
+                 HeightRequest="30"
+                 WidthRequest="30" />
+                <Label Text="18+" FontSize="18" TextColor="White" />
+                <WebView Source="https://example.com/cast_icon.png"
+                 HeightRequest="30"
+                 WidthRequest="30" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

@@ -8,7 +8,15 @@
     <ContentPage.BindingContext>
         <vm:ProfileViewModel/>
     </ContentPage.BindingContext>
-    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Entry">
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="PlaceholderColor" Value="LightGray"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <Grid>
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -30,7 +38,7 @@
                        HeightRequest="140">
                     <Image Source="{Binding Avatar}">
                         <Image.GestureRecognizers>
-                            <TapGestureRecognizer/>
+                            <TapGestureRecognizer Command="{Binding SetImageCommand}"/>
                         </Image.GestureRecognizers>
                     </Image>
                 </Frame>
@@ -58,9 +66,15 @@
                BackgroundColor="#4DC5C5C5">
                     <DatePicker Date="{Binding Birthday}"/>
                 </Frame>
-                <Button Text="Logout" FontAttributes="Bold"
-                Command="{Binding ToAuthCommand}" TextColor="White"
-                Background="#046FD2"/>
+                <Grid ColumnDefinitions="*,10,*">
+                    <Button Text="Logout" FontAttributes="Bold"
+                            Command="{Binding ToAuthCommand}" TextColor="White"
+                            Background="#D24604"/>
+                    <Button Text="Update" FontAttributes="Bold" Grid.Column="2"
+                            Command="{Binding UpdateCommand}" TextColor="White"
+                            Background="#046FD2"/>
+                </Grid>
+                
             </StackLayout>
         </Frame>
     </Grid>

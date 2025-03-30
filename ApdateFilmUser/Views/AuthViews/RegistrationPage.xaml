@@ -8,6 +8,16 @@
         <vm:RegistrationViewModel/>
     </ContentPage.BindingContext>
     
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Entry">
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="PlaceholderColor" Value="LightGray"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
     <Grid>
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -42,7 +52,8 @@
                 </Frame>
                 <Frame CornerRadius="10" Padding="5"
                    BackgroundColor="#4DC5C5C5">
-                    <DatePicker Date="{Binding Birthday}"/>
+                    <DatePicker Date="{Binding Birthday}"
+                                TextColor="White"/>
                 </Frame>
                 <Button Text="Sign In" FontAttributes="Bold"
                     Command="{Binding SignInCommand}"

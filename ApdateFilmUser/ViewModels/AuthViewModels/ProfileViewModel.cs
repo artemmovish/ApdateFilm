@@ -1,4 +1,5 @@
-﻿using ApdateFilmUser.Servieces;
+﻿using ApdateFilmUser.Models;
+using ApdateFilmUser.Servieces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
@@ -28,7 +29,6 @@ namespace ApdateFilmUser.ViewModels.AuthViewModels
 
         [ObservableProperty]
         private string avatar;
-
         public async Task LoadProfile()
         {
             var user = await AuthServiec.GetProfileAsync();
@@ -39,11 +39,56 @@ namespace ApdateFilmUser.ViewModels.AuthViewModels
             Birthday = user.Birthday;
             Avatar = user.Avatar;
         }
+
         [RelayCommand]
-        async void ToAuth()
+        async Task SetImage()
+        {
+            try
+            {
+                var result = await FilePicker.PickAsync(new PickOptions
+                {
+                    PickerTitle = "Выберите изображение",
+                    FileTypes = FilePickerFileType.Images
+                });
+
+                if (result != null)
+                {
+                    using var stream = await result.OpenReadAsync();
+
+                    var filePath = Path.Combine(FileSystem.CacheDirectory, result.FileName);
+                    using var newFile = File.Create(filePath);
+                    await stream.CopyToAsync(newFile);
+
+                    Avatar = filePath;
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Ошибка", $"Не удалось выбрать изображение: {ex.Message}", "OK");
+            }
+        }
+
+
+        [RelayCommand]
+        async Task ToAuth()
         {
             await AuthServiec.LogoutAsync();
             await Shell.Current.GoToAsync("auth");
+        }
+
+        [RelayCommand]
+        async Task Update()
+        {
+            var user = new User
+            {
+                Surname = Surname,
+                Name = Name,
+                Email = Email,
+                Birthday = Birthday,
+                Avatar = Avatar
+            };
+
+            await AuthServiec.UpdateAsync(user);
         }
     }
 }

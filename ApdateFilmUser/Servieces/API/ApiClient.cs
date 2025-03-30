@@ -59,6 +59,21 @@ namespace ApdateFilmUser.Services.API
             return await response.Content.ReadAsStringAsync();
         }
 
+        public static async Task<string> SendFormDataAsync(string endpoint, MultipartFormDataContent formData)
+        {
+            Debug.WriteLine($"POST (Multipart): {_baseUrl}/{endpoint}");
+
+            // Убедимся, что токен установлен
+            if (!string.IsNullOrEmpty(_token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token);
+            }
+
+            var response = await _httpClient.PostAsync($"{_baseUrl}/{endpoint}", formData);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
+        }
         public static async Task<bool> DeleteAsync(string endpoint)
         {
             Debug.WriteLine($"DELETE: {_baseUrl}/{endpoint}");
@@ -66,7 +81,6 @@ namespace ApdateFilmUser.Services.API
             response.EnsureSuccessStatusCode();
             return true;
         }
-
         public static void HandleException(Exception ex)
         {
             switch (ex)

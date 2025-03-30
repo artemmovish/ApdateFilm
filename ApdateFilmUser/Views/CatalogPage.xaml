@@ -23,27 +23,40 @@
         <vm:CatalogViewModel/>
     </ContentPage.BindingContext>
     
-    <Grid RowDefinitions="70,auto, *">
+    <Grid RowDefinitions="80,auto, *">
         <Grid>
             <Label Text="SmotriKino" Margin="10,10,0,0"
                    FontSize="25" FontAttributes="Italic"/>
-            <Image Source="search.png" Margin="0,0,10,0"
+            <Image Source="search.png" Margin="0,0,10,10"
                    HorizontalOptions="End"/>
+            <StackLayout Orientation="Horizontal"
+                         Margin="40,50,0,0"
+                         Spacing="10"
+                         HeightRequest="30">
+                <Button Text="Рекомендуем" TextColor="White"
+                        WidthRequest="120"
+                        Padding="5"
+                        CornerRadius="15"
+                        Background="#001346"/>
+                <Button Text="Категории"
+                        WidthRequest="100"
+                        CornerRadius="15"
+                        Padding="5"
+                        TextColor="White"
+                        Background="Transparent"/>
+            </StackLayout>
         </Grid>
         
-        <VerticalStackLayout Margin="30,0,30,0" Grid.Row="1">
+        <VerticalStackLayout Margin="0,0,0,0" Grid.Row="1">
             <CarouselView 
         HeightRequest="430" 
-        WidthRequest="290" 
         PeekAreaInsets="60"  
         ItemsSource="{Binding Medias}" 
         IndicatorView="{x:Reference indicator}"
         CurrentItemChanged="OnCurrentItemChanged">
-                
-
                 <CarouselView.ItemTemplate>
                     <DataTemplate>
-                        <Frame 
+                        <Frame Margin="10"
                     HasShadow="True" 
                     BorderColor="Gray" 
                     Padding="0" 
@@ -51,6 +64,11 @@
                     HeightRequest="380"
                             Scale="{Binding IsSelected, Converter={StaticResource ScaleConverter}}">
 
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer 
+        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CatalogViewModel}}, Path=TapMediaCommand}"
+        CommandParameter="{Binding .}"/>
+                            </Frame.GestureRecognizers>
 
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="SelectionStates">
@@ -85,7 +103,7 @@
 
         <Grid RowDefinitions="auto,*"
               Grid.Row="2">
-            <Label Margin="20,0,10,0"
+            <Label Margin="20,0,10,0"  TextColor="White"
                    Text="Лучшее сейчас"/>
             <CollectionView ItemsSource="{Binding Medias}" Margin="10,0,0,0"
                             Grid.Row="1">
@@ -96,7 +114,13 @@
                     <DataTemplate>
                         <Frame HasShadow="True" BorderColor="Gray" Padding="0" CornerRadius="10"
                            HeightRequest="170" WidthRequest="130">
-                            <Image Source="{Binding Preview}" Aspect="Fill"/>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer 
+        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CatalogViewModel}}, Path=TapMediaCommand}"
+        CommandParameter="{Binding .}"/>
+                            </Frame.GestureRecognizers>
+
+                            <Image Source="{Binding Preview}" InputTransparent="True" Aspect="Fill"/>
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

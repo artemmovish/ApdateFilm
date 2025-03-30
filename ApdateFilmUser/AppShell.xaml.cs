@@ -1,4 +1,5 @@
-﻿using ApdateFilmUser.Views.AuthViews;
+﻿using ApdateFilmUser.Views;
+using ApdateFilmUser.Views.AuthViews;
 
 namespace ApdateFilmUser
 {
@@ -12,6 +13,7 @@ namespace ApdateFilmUser
             Routing.RegisterRoute("registration", typeof(RegistrationPage));
             Routing.RegisterRoute("auth", typeof(AuthPage));
             Routing.RegisterRoute("profile", typeof(ProfilePage));
+            Routing.RegisterRoute("media", typeof(MediaPage));
         }
     }
 }

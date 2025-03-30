@@ -56,37 +56,54 @@ namespace ApdateFilmUser.Servieces
             return null;
         }
 
-        public static async Task<User> UpdateAsync(User userRequest)
+        public static async Task UpdateAsync(User user)
         {
+            string filePath = user.Avatar; // Путь к изображению (если оно есть)
+
+            using var formData = new MultipartFormDataContent();
+            FileStream fileStream = null;
+
             try
             {
-                var userResponse = await ApiClient.PostAsync("api/profile", userRequest);
+                // Добавляем текстовые данные пользователя в форму
+                Console.WriteLine("[Отладка] Добавляем данные пользователя...");
+                formData.Add(new StringContent(user.Surname), "surname");
+                formData.Add(new StringContent(user.Name), "name");
+                formData.Add(new StringContent(user.Email), "email");
+                formData.Add(new StringContent(user.Birthday.ToString("yyyy-MM-dd")), "birthday");
 
-                if (string.IsNullOrEmpty(userResponse))
+                // Если есть пароль, добавляем его
+                if (!string.IsNullOrEmpty(user.Password))
                 {
-                    Debug.WriteLine("Ошибка: Пустой ответ от сервера.");
-                    return null;
+                    formData.Add(new StringContent(user.Password), "password");
                 }
 
-                var authResponse = JsonSerializer.Deserialize<AuthResponse>(userResponse, ApiClient.options);
+                Console.WriteLine("[Отладка] Данные пользователя успешно добавлены.");
 
-                if (!string.IsNullOrEmpty(authResponse.Token))
+                // Если есть аватар, добавляем его
+                if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
                 {
-                    // Устанавливаем токен в ApdateFilmUserClient
-                    ApiClient.SetToken(authResponse.Token);
-                    Debug.WriteLine("Токен успешно установлен.");
-                    return authResponse.User;
+                    Console.WriteLine($"[Отладка] Загружаем файл: {filePath}");
+                    fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    var streamContent = new StreamContent(fileStream);
+                    formData.Add(streamContent, "avatar", Path.GetFileName(filePath));
+                    Console.WriteLine("[Отладка] Аватар добавлен в форму данных.");
                 }
                 else
                 {
-                    Debug.WriteLine("Токен не обнаружен в ответе.");
+                    Console.WriteLine("[Предупреждение] Аватар не найден или путь пуст. Профиль будет обновлен без изменения аватара.");
                 }
+
+                await ApiClient.SendFormDataAsync("api/profile", formData);
             }
             catch (Exception ex)
             {
                 ApiClient.HandleException(ex);
             }
-            return null;
+            finally
+            {
+                fileStream?.Dispose();
+            }
         }
 
         public static async Task<User> LoginAsync(User userRequest)
