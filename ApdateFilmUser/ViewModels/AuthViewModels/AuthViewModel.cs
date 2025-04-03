@@ -44,6 +44,5 @@ namespace ApdateFilmUser.ViewModels.AuthViewModels
 
             await Shell.Current.GoToAsync("profile");
         }
-
     }
 }

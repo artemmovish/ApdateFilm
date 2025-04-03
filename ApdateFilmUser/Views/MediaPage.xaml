@@ -15,7 +15,7 @@
         <VerticalStackLayout Spacing="10">
             <!-- Изображение фильма (заменено на WebView) -->
             <WebView Source="{Binding ContentURL}"
-             HeightRequest="200" />
+             HeightRequest="300" />
 
             <!-- Заголовок (без Frame) -->
             <VerticalStackLayout Padding="10">
@@ -36,9 +36,27 @@
 
             <!-- Дополнительная информация (без Frame) -->
             <VerticalStackLayout Padding="10">
-                <Label Text="Жанр: Боевик"
-               FontSize="16"
-               TextColor="White" />
+                <Grid ColumnDefinitions="auto, *">
+                    <Label Text="Жанр: "
+                           FontSize="16"
+                           TextColor="White" />
+                    <CollectionView ItemsSource="{Binding Genres}"
+                                    HorizontalScrollBarVisibility="Always"
+                                    Grid.Column="1"
+                ItemsLayout="HorizontalList">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Padding="3"
+                   Background="#003587"
+                   BorderColor="Transparent">
+                                    <Label Text="{Binding Name}"
+                       TextColor="White"/>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+
                 <Label Text="Год производства: 2021"
                FontSize="16"
                TextColor="White" />
@@ -48,24 +66,32 @@
             </VerticalStackLayout>
 
             <!-- Кнопка воспроизведения -->
-            <Button Text="Воспроизвести"
-            BackgroundColor="#2563EB"
-            TextColor="White"
-            FontSize="18"
-            CornerRadius="10"
-            Margin="20,10" />
+            <Button Text="Назад"
+                    BackgroundColor="#2563EB"
+                    TextColor="White"
+                    FontSize="18"
+                    CornerRadius="10"
+                    Margin="20,10" 
+                    Clicked="Button_Clicked"/>
 
             <!-- Нижние элементы -->
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
-                <WebView Source="https://example.com/favorite_icon.png"
-                 HeightRequest="30"
-                 WidthRequest="30" />
-                <Label Text="18+" FontSize="18" TextColor="White" />
-                <WebView Source="https://example.com/cast_icon.png"
-                 HeightRequest="30"
-                 WidthRequest="30" />
+                <StackLayout>
+                    <Image Source="checkfavorites.png"/>
+                    <Label Text="В избранном"
+                           Opacity="0.7"/>
+                </StackLayout>
+                <StackLayout>
+                    <Label Text="18+"
+                           Opacity="1"
+                           FontSize="30"/>
+                </StackLayout>
+                <StackLayout>
+                    <Image Source="actorsicon.png"/>
+                    <Label Text="Актерский состав"
+                           Opacity="0.7"/>
+                </StackLayout>
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>

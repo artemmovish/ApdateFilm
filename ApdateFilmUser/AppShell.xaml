@@ -13,7 +13,7 @@
     <TabBar>
         <ShellContent 
             Icon="catalog.png"
-            Title="Меню"
+            Title="Каталог"
             ContentTemplate="{DataTemplate view:CatalogPage }"/>
         <ShellContent 
             Icon="images//profile.png"
@@ -21,7 +21,7 @@
             ContentTemplate="{DataTemplate authview:ProfilePage }"/>
         <ShellContent 
             Icon="favorites.png"
-            Title="Корзина"
+            Title="Избранное"
             ContentTemplate="{DataTemplate view:FavoritesPage }"/>
     </TabBar>
 

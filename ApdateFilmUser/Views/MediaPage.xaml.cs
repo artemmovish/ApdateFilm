@@ -24,7 +24,11 @@ public partial class MediaPage : ContentPage
         BindingContext = MediaItem;
     }
 
-
-
-
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+        async Task Back()
+        {
+            await Shell.Current.GoToAsync("../");
+        }
+    }
 }

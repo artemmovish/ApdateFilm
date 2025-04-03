@@ -74,6 +74,9 @@
 		<MauiXaml Update="Views\AuthViews\RegistrationPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\CatalogFiltrPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\CatalogPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
