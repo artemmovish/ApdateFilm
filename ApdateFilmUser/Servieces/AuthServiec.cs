@@ -69,7 +69,7 @@ namespace ApdateFilmUser.Servieces
                 Console.WriteLine("[Отладка] Добавляем данные пользователя...");
                 formData.Add(new StringContent(user.Surname), "surname");
                 formData.Add(new StringContent(user.Name), "name");
-                formData.Add(new StringContent(user.Email), "email");
+                //formData.Add(new StringContent(user.Email), "email");
                 formData.Add(new StringContent(user.Birthday.ToString("yyyy-MM-dd")), "birthday");
 
                 // Если есть пароль, добавляем его
@@ -94,7 +94,7 @@ namespace ApdateFilmUser.Servieces
                     Console.WriteLine("[Предупреждение] Аватар не найден или путь пуст. Профиль будет обновлен без изменения аватара.");
                 }
 
-                await ApiClient.SendFormDataAsync("api/profile", formData);
+                await ApiClient.SendFormDataAsync($"api/profile", formData);
             }
             catch (Exception ex)
             {

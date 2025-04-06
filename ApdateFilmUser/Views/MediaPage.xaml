@@ -15,7 +15,7 @@
         <VerticalStackLayout Spacing="10">
             <!-- Изображение фильма (заменено на WebView) -->
             <WebView Source="{Binding ContentURL}"
-             HeightRequest="300" />
+             HeightRequest="240" />
 
             <!-- Заголовок (без Frame) -->
             <VerticalStackLayout Padding="10">
@@ -82,7 +82,7 @@
                            Opacity="0.7"/>
                 </StackLayout>
                 <StackLayout>
-                    <Label Text="18+"
+                    <Label Text="{Binding AgeRating}"
                            Opacity="1"
                            FontSize="30"/>
                 </StackLayout>
@@ -92,6 +92,56 @@
                            Opacity="0.7"/>
                 </StackLayout>
             </HorizontalStackLayout>
+
+            <Frame BackgroundColor="Transparent" Margin="5">
+                <Grid RowDefinitions="*, auto, auto, auto">
+                    <!-- Поле для отзыва -->
+                    <Entry x:Name="ReviewEntry" 
+               Placeholder="Напишите ваш отзыв..." />
+
+                    <Grid Grid.Row="1">
+                        <FlexLayout x:Name="RatingContainer"
+                                    Wrap="Wrap" 
+                                    AlignItems="Center"
+                                    JustifyContent="Center"
+                                    Margin="0"/>
+                    </Grid>
+
+                    <!-- Кнопка отправки -->
+                    <Button Grid.Row="3" Margin="0,10,0,0" 
+                Background="#2563EB"
+                TextColor="White"
+                FontSize="18"
+                CornerRadius="10"
+                Text="Отправить отзыв"
+                Clicked="OnSubmitReviewClicked"/>
+                </Grid>
+            </Frame>
+
+            <CollectionView ItemsSource="{Binding Review}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="10" BackgroundColor="Transparent">
+                            <Grid RowDefinitions="auto, *">
+                                <StackLayout Orientation="Horizontal" Spacing="10">
+                                    <Image Source="{Binding User.Avatar}"
+                               HeightRequest="26" WidthRequest="26"/>
+                                    <Label Text="{Binding User.Name}"
+                                           FontSize="16"/>
+                                    <Frame CornerRadius="16" Padding="0" BackgroundColor="#2563EB"
+                                           WidthRequest="26" HeightRequest="26">
+                                        <Label HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                            Text="{Binding Rating}"/>
+                                    </Frame>
+                                </StackLayout>
+                                <Label Grid.Row="1"
+                                    Text="{Binding Text}"/>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

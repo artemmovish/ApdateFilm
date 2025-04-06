@@ -16,9 +16,9 @@ namespace ApdateFilmUser.ViewModels.AuthViewModels
     public partial class AuthViewModel : ObservableObject
     {
         [ObservableProperty]
-        string email = "Console@api.com";
+        string email = "user@mail.ru";
         [ObservableProperty]
-        string password = "12345678";
+        string password = "user123";
 
         [RelayCommand]
         async void ToRegisters()

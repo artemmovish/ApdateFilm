@@ -25,12 +25,25 @@ namespace ApdateFilmUser.ViewModels
 
         async Task LoadMedia()
         {
-            var list = await MediaServiec.GetMediaAsync();
-
-            foreach (var media in list)
+            for (int i = 0; i < 3; i++)
             {
-                Medias.Add(media);
+                try
+                {
+                    var list = await MediaServiec.GetMediaAsync();
+
+                    foreach (var media in list)
+                    {
+                        Medias.Add(media);
+                    }
+                    return;
+                }
+                catch (Exception)
+                {
+                    await Shell.Current.DisplayAlert("Ошибка загрузки", "Проверте подключение к интернету", "ОК");
+                    await Task.Delay(10000);
+                }
             }
+            await Shell.Current.DisplayAlert("Ошибка загрузки", "Долгий ответ от сервера, попробуйте позже", "ОК");
             
         }
 

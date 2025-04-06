@@ -1,4 +1,5 @@
 ﻿using ApdateFilmUser.Models;
+using ApdateFilmUser.Services.API;
 using ApdateFilmUser.Servieces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -37,7 +38,7 @@ namespace ApdateFilmUser.ViewModels.AuthViewModels
             Name = user.Name;
             Email = user.Email;
             Birthday = user.Birthday;
-            Avatar = "storage/" + user.Avatar;
+            Avatar = $"{ApiClient.GetURL()}/storage/" + user.Avatar;
         }
 
         [RelayCommand]

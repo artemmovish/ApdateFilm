@@ -72,6 +72,10 @@ namespace ApdateFilmUser.Services.API
 
             var response = await _httpClient.PostAsync($"{_baseUrl}/{endpoint}", formData);
             response.EnsureSuccessStatusCode();
+            // Дополнительная отладка
+            Console.WriteLine($"[Отладка] Ответ сервера: {response.StatusCode}");
+            string responseContent = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"[Отладка] Тело ответа: {responseContent}");
             return await response.Content.ReadAsStringAsync();
         }
         public static async Task<bool> DeleteAsync(string endpoint)

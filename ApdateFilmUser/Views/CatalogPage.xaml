@@ -43,11 +43,12 @@
                         CornerRadius="15"
                         Padding="5"
                         TextColor="White"
-                        Background="Transparent"/>
+                        Background="Transparent"
+                        Clicked="Button_Clicked"/>
             </StackLayout>
         </Grid>
         
-        <VerticalStackLayout Margin="0,0,0,0" Grid.Row="1">
+        <VerticalStackLayout Margin="0,20,0,0" Grid.Row="1">
             <CarouselView 
         HeightRequest="430" 
         PeekAreaInsets="60"  

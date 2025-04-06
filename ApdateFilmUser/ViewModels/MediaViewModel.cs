@@ -17,8 +17,6 @@ namespace ApdateFilmUser.ViewModels
         {
             Media = media;
         }
-        
-        [RelayCommand]
-        
+            
     }
 }

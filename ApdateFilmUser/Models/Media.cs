@@ -25,6 +25,6 @@ namespace ApdateFilmUser.Models
         public List<Genre> Genres { get; set; }
         public List<Director> Directors { get; set; }
         public List<Actor> Actors { get; set; }
-        public List<Review> Reviews { get; set; }
+        public List<Review> Review { get; set; }
     }
 }

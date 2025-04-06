@@ -11,6 +11,8 @@ namespace ApdateFilmUser.Models
 
     public class User
     {
+        public int id { get; set; }
+
         [JsonPropertyName("surname")]
         public string Surname { get; set; }
 

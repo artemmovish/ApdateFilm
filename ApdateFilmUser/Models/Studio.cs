@@ -1,20 +1,22 @@
-﻿using Flurl.Util;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ApdateFilmUser.Models
 {
-    public class Genre
+    public class Studio
     {
+        [JsonPropertyName("id")]
         public int Id { get; set; }
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        public Genre() { }
-        
-        public Genre(string name)
+        public Studio() { }
+
+        public Studio(string name)
         {
             Name = name;
         }

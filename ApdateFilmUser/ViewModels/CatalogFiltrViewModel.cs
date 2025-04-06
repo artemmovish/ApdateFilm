@@ -2,11 +2,14 @@
 using ApdateFilmUser.Models;
 using ApdateFilmUser.Servieces;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ApdateFilmUser.ViewModels
@@ -27,114 +30,226 @@ namespace ApdateFilmUser.ViewModels
         ObservableCollection<Genre> genres;
 
         [ObservableProperty]
-        Genre selectedGenre;
-        [ObservableProperty]
-        DateTime dateStart;
-        [ObservableProperty]
-        DateTime dateEnd;
-        [ObservableProperty]
-        string rating;
+        ObservableCollection<DateTime> yers;
+
+
+        Genre SelectedGenre;
+        DateTime? SelectedDate;
+        Studio SelectedStudio;
 
         public CatalogFiltrViewModel()
         {
+            Films = new ObservableCollection<Media>();
+            Serials = new ObservableCollection<Media>();
+            Genres = new ObservableCollection<Genre>();
+            Yers = new ObservableCollection<DateTime>();
             LoadMedia();
         }
 
-        async Task LoadMedia()
+        [RelayCommand]
+        async Task TapMedia(Media media)
         {
+            var serializedItem = JsonSerializer.Serialize(media);
+            await Shell.Current.GoToAsync("media",
+                new Dictionary<string, object> { { "media", media } });
+        }
 
-            Films = new ObservableCollection<Media>();
-            Serials = new ObservableCollection<Media>();
-
+        public async Task LoadMedia()
+        {
             try
             {
-                var list = await MediaServiec.GetMediaAsync();
+                Films.Clear();
+                Serials.Clear();
+                Genres.Clear();
 
-                var uniqueGenres = new HashSet<Genre>();
+                var list = await MediaServiec.GetMediaAsync();
+                if (list == null) return;
 
                 foreach (var media in list)
                 {
+                    if (media == null) continue;
+
                     if (media.Type == 1)
                         Serials.Add(media);
                     else
                         Films.Add(media);
 
-                    if (media.Genres != null)
-                    {
-                        foreach (var genre in media.Genres)
-                        {
-                            uniqueGenres.Add(genre);
-                        }
-                    }
+                    Yers.Add(media.Release);
                 }
 
-                foreach(var g in uniqueGenres)
-                {
-                    Genres.Add(g);
-                }
+                Genres = new ObservableCollection<Genre>(await MediaServiec.GetGenreAsync());
 
                 FilmsFiltr = new ObservableCollection<Media>(Films);
                 SerialsFiltr = new ObservableCollection<Media>(Serials);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Отладка] Ошибка при загрузке медиа: {ex.Message}");
+            }
+        }
+
+        private async Task FilterMedia(IEnumerable<Media> source)
+        {
+            try
+            {
+                // Применяем фильтры последовательно
+                var filteredItems = source.AsEnumerable();
+
+                // Фильтрация по году
+                if (SelectedDate != null)
+                {
+                    filteredItems = filteredItems.Where(m => m.Release.Year == SelectedDate.Value.Year);
+                }
+
+                // Фильтрация по жанру
+                if (SelectedGenre != null)
+                {
+                    filteredItems = filteredItems.Where(m =>
+                        m.Genres?.Any(g => g.Name == SelectedGenre.Name) == true);
+                }
+
+                // Фильтрация по студии
+                if (SelectedStudio != null)
+                {
+                    filteredItems = filteredItems.Where(m =>
+                        m.Studio == SelectedStudio.Name);
+                }
+
+                // Разделяем на фильмы и сериалы
+                var filteredFilms = filteredItems.Where(m => m.Type == 0).ToList();
+                var filteredSerials = filteredItems.Where(m => m.Type == 1).ToList();
+
+                // Обновляем отфильтрованные коллекции
+                FilmsFiltr = new ObservableCollection<Media>(filteredFilms);
+                SerialsFiltr = new ObservableCollection<Media>(filteredSerials);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Отладка] Ошибка при фильтрации: {ex.Message}");
+                // В случае ошибки показываем все элементы
+                FilmsFiltr = new ObservableCollection<Media>(Films);
+                SerialsFiltr = new ObservableCollection<Media>(Serials);
+            }
+        }
+
+        [RelayCommand]
+        public async Task SetFiltrDate()
+        {
+            try
+            {
+                // Преобразуем года в строки и создаем массив
+                var answers = Yers.Select(item => item.Year.ToString()).ToArray();
+
+                // Показываем ActionSheet для выбора года
+                string result = await Shell.Current.DisplayActionSheet(
+                    "Выберите год",
+                    "Отмена",
+                    null,
+                    answers);
+
+                // Обрабатываем результат выбора
+                if (result == null || result == "Отмена")
+                {
+                    SelectedDate = null;
+                }
+                else
+                {
+                    // Парсим выбранный год и устанавливаем в SelectedDate
+                    if (int.TryParse(result, out int selectedYear))
+                    {
+                        SelectedDate = new DateTime(selectedYear, 1, 1);
+                    }
+                    else
+                    {
+                        SelectedDate = null;
+                    }
+                }
+                // Применяем фильтрацию после выбора
+                FilterMedia(Films.Concat(Films));
+                FilterMedia(Films.Concat(Serials));
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[Отладка] Ошибка при загрузке медиа: {ex.Message}");
+                // Обработка возможных ошибок
+                Console.WriteLine($"[Отладка] Ошибка при выборе года: {ex.Message}");
+                SelectedDate = null;
             }
         }
 
-        public void ApplyFilters()
+        [RelayCommand]
+        public async Task SetFiltrGenre()
         {
-            FilmsFiltr = new ObservableCollection<Media>(FilterMedia(Films));
-            SerialsFiltr = new ObservableCollection<Media>(FilterMedia(Serials));
+            try
+            {
+                // Преобразуем года в строки и создаем массив
+                var answers = Genres.Select(item => item.Name.ToString()).ToArray();
+
+                // Показываем ActionSheet для выбора года
+                string result = await Shell.Current.DisplayActionSheet(
+                    "Выберите год",
+                    "Отмена",
+                    null,
+                    answers);
+
+                // Обрабатываем результат выбора
+                if (result == null || result == "Отмена")
+                {
+                    SelectedGenre = null;
+                }
+                else
+                {
+                    SelectedGenre = new Genre(result);
+                }
+
+                // Применяем фильтрацию после выбора
+                FilterMedia(Films.Concat(Films));
+                FilterMedia(Films.Concat(Serials));
+            }
+            catch (Exception ex)
+            {
+                // Обработка возможных ошибок
+                Console.WriteLine($"[Отладка] Ошибка при выборе жанра: {ex.Message}");
+                SelectedGenre = null;
+            }
         }
 
-        private IEnumerable<Media> FilterMedia(IEnumerable<Media> source)
+        [RelayCommand]
+        public async Task SetFiltrStudio()
         {
-            if (source == null) yield break;
-
-            foreach (var media in source)
+            try
             {
-                bool matchesFilter = true;
+                // Преобразуем года в строки и создаем массив
+                var answers = Genres.Select(item => item.Name.ToString()).ToArray();
 
-                // Фильтрация по жанру (если выбран)
-                if (SelectedGenre != null)
+                // Показываем ActionSheet для выбора года
+                string result = await Shell.Current.DisplayActionSheet(
+                    "Выберите год",
+                    "Отмена",
+                    null,
+                    answers);
+
+                // Обрабатываем результат выбора
+                if (result == null || result == "Отмена")
                 {
-                    matchesFilter = media.Genres != null && media.Genres.Contains(SelectedGenre);
-                    if (!matchesFilter) continue;
+                    SelectedStudio = null;
+                }
+                else
+                {
+                    SelectedStudio = new Studio(result);
                 }
 
-                // Фильтрация по дате начала (если задана)
-                if (DateStart != default(DateTime))
-                {
-                    matchesFilter = media.Release >= DateStart;
-                    if (!matchesFilter) continue;
-                }
-
-                // Фильтрация по дате окончания (если задана)
-                if (DateEnd != default(DateTime))
-                {
-                    matchesFilter = media.Release <= DateEnd;
-                    if (!matchesFilter) continue;
-                }
-
-                // Фильтрация по рейтингу (если задан)
-                if (!string.IsNullOrEmpty(Rating))
-                {
-                    if (double.TryParse(Rating, out double ratingValue))
-                    {
-                        double.TryParse(Rating, out double ratingValueMedia);
-
-                        matchesFilter = ratingValueMedia >= ratingValue;
-                        if (!matchesFilter) continue;
-                    }
-                }
-
-                if (matchesFilter)
-                {
-                    yield return media;
-                }
+                // Применяем фильтрацию после выбора
+                FilterMedia(Films.Concat(Films));
+                FilterMedia(Films.Concat(Serials));
+            }
+            catch (Exception ex)
+            {
+                // Обработка возможных ошибок
+                Console.WriteLine($"[Отладка] Ошибка при выборе студия: {ex.Message}");
+                SelectedStudio = null;
             }
         }
     }
+
 }

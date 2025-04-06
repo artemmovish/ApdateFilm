@@ -24,4 +24,9 @@ public partial class CatalogPage : ContentPage
             }
         }
     }
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+        Shell.Current.GoToAsync("catalogfiltr");
+    }
 }
