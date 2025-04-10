@@ -92,6 +92,11 @@ CommandParameter="{Binding .}"/>
                             <Grid Padding="10">
                                 <Frame CornerRadius="10" BackgroundColor="Transparent"
                BorderColor="Transparent">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer 
+Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CatalogFiltrViewModel}}, Path=TapMediaCommand}"
+CommandParameter="{Binding .}"/>
+                                    </Frame.GestureRecognizers>
                                     <Image Source="{Binding Preview}"/>
                                 </Frame>
                             </Grid>

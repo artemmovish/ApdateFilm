@@ -77,7 +77,11 @@
             <!-- Нижние элементы -->
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
                 <StackLayout>
-                    <Image Source="checkfavorites.png"/>
+                    <Image x:Name="CheckFavorite" WidthRequest="48" HeightRequest="48">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                        </Image.GestureRecognizers>
+                    </Image>
                     <Label Text="В избранном"
                            Opacity="0.7"/>
                 </StackLayout>
@@ -114,7 +118,7 @@
                 FontSize="18"
                 CornerRadius="10"
                 Text="Отправить отзыв"
-                Clicked="OnSubmitReviewClicked"/>
+                Clicked="Button_Clicked_1"/>
                 </Grid>
             </Frame>
 
@@ -124,7 +128,7 @@
                         <Frame Margin="10" BackgroundColor="Transparent">
                             <Grid RowDefinitions="auto, *">
                                 <StackLayout Orientation="Horizontal" Spacing="10">
-                                    <Image Source="{Binding User.Avatar}"
+                                    <Image Source="{Binding User.Avatar}" 
                                HeightRequest="26" WidthRequest="26"/>
                                     <Label Text="{Binding User.Name}"
                                            FontSize="16"/>

@@ -1,8 +1,11 @@
 using ApdateFilmUser.Models;
+using ApdateFilmUser.Services.API;
+using ApdateFilmUser.Servieces;
 using ApdateFilmUser.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Diagnostics;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace ApdateFilmUser.Views;
@@ -11,6 +14,7 @@ namespace ApdateFilmUser.Views;
 public partial class MediaPage : ContentPage
 {
     private int _selectedRating = 0;
+    private bool _checkFavorite = false;
     public Media MediaItem { get; set; }
 
     public MediaPage()
@@ -60,19 +64,48 @@ public partial class MediaPage : ContentPage
         }
     }
 
-    private void OnSubmitReviewClicked(object sender, EventArgs e)
+    private async Task InitializeFavorite()
     {
-        
+        foreach (var item in MediaItem.Review)
+        {
+            item.User.Avatar = $"{ApiClient.GetURL()}/storage/" + item.User.Avatar;
+        }
+
+        _checkFavorite = await MediaServiec.CheckFavoriteAsync(MediaItem.Id);
+
+        CheckFavorite.Source = (_checkFavorite) ? "checkfavorites.png" : "close.png";
     }
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
         BindingContext = MediaItem;
+        InitializeFavorite();
     }
 
     private async void Button_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("../");
+    }
+
+    private void Button_Clicked_1(object sender, EventArgs e)
+    {
+        MediaServiec.AddReviewAsync(MediaItem.Id, ReviewEntry.Text, _selectedRating);
+    }
+
+    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        if (_checkFavorite)
+        {
+            MediaServiec.AddToFavoriteAsync(MediaItem.Id);
+            _checkFavorite = false;
+        }
+        else
+        {
+            MediaServiec.DeleteToFavoriteAsync(MediaItem.Id);
+            _checkFavorite = true;
+        }
+
+        CheckFavorite.Source = (_checkFavorite) ? "checkfavorites.png" : "close.png";
     }
 }

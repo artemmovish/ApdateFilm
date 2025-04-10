@@ -37,7 +37,6 @@ namespace ApdateFilmUser.Servieces
 
             return null;
         }
-
         public static async Task<List<Genre>> GetGenreAsync()
         {
             try
@@ -61,7 +60,6 @@ namespace ApdateFilmUser.Servieces
 
             return null;
         }
-
         public static async Task<List<Studio>> GetStudioAsync()
         {
             try
@@ -85,7 +83,6 @@ namespace ApdateFilmUser.Servieces
 
             return null;
         }
-
         public static async Task<User> AddToFavoriteAsync(int id)
         {
             try
@@ -104,6 +101,102 @@ namespace ApdateFilmUser.Servieces
             {
                 ApiClient.HandleException(ex);
             }
+            return null;
+        }
+        public static async Task<User> DeleteToFavoriteAsync(int id)
+        {
+            try
+            {
+                var reqwest = new { media_id = id };
+
+                var userResponse = await ApiClient.DeleteAsync($"api/reviews/{id}");
+
+                if (userResponse)
+                {
+                    Debug.WriteLine("[Отладка] Ошибка: Пустой ответ от сервера.");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                ApiClient.HandleException(ex);
+            }
+            return null;
+        }
+        public static async Task<bool> CheckFavoriteAsync(int id)
+        {
+            try
+            {
+                var checkResponse = await ApiClient.GetAsync($"api/favorites/{id}/exist");
+
+                if (string.IsNullOrEmpty(checkResponse))
+                {
+                    Debug.WriteLine("[Отладка] Ошибка: Пустой ответ от сервера.");
+                    return false;
+                }
+
+                return checkResponse == "1" ? true : false;
+            }
+            catch (Exception ex)
+            {
+                ApiClient.HandleException(ex);
+            }
+            return false;
+        }
+        public static async Task<bool> AddReviewAsync(int id, string text, int rating)
+        {
+            try
+            {
+                var checkResponse = await ApiClient.PostAsync($"api/reviews?media_id={id}&text={text}&rating={rating}", "");
+
+                if (string.IsNullOrEmpty(checkResponse))
+                {
+                    Debug.WriteLine("[Отладка] Ошибка: Пустой ответ от сервера.");
+
+                    await Shell.Current.DisplayAlert("Ошибка", "Отзыв не добавлен", "ОК");
+                }
+                await Shell.Current.DisplayAlert("Успех", "Отзыв добавлен", "ОК");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ApiClient.HandleException(ex);
+                await Shell.Current.DisplayAlert("Ошибка", "Отзыв не добавлен", "ОК");
+            }
+            return false;
+        }
+
+        public static async Task<List<Media>> GetMediaFavoriteAsync()
+        {
+            try
+            {
+                var mediaResponse = await ApiClient.GetAsync("api/favorites");
+
+                if (String.IsNullOrEmpty(mediaResponse))
+                {
+                    Debug.WriteLine("Ответ от сервера пустой");
+                    return null;
+                }
+
+                var mediaListResponse_ = JsonSerializer.Deserialize<List<List<Media>>>(mediaResponse, ApiClient.options);
+
+                var result = new List<Media>();
+                foreach (var media in mediaListResponse_)
+                {
+                    foreach (var item in media)
+                    {
+                        item.Preview = $"{ApiClient.GetURL()}/storage/{item.Preview}";
+                        result.Add(item);
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                ApiClient.HandleException(ex);
+            }
+
             return null;
         }
     }
