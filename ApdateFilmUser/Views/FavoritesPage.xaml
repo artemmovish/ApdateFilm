@@ -15,29 +15,71 @@
         <vm:FavoriteViewModel/>
     </ContentPage.BindingContext>
 
-    <Grid>
-        <CollectionView Grid.Row="1" ItemsSource="{Binding Medias}">
-            <CollectionView.ItemsLayout>
-                <GridItemsLayout  Span="3" Orientation="Vertical" />
-                <!-- Количество колонок -->
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Padding="10">
-                        <Frame CornerRadius="10" BackgroundColor="Transparent"
-                           BorderColor="Transparent">
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer 
+    <Grid RowDefinitions="auto, *">
+        <Grid Grid.Row="0" Margin="10" HeightRequest="30"
+            ColumnDefinitions="*,*,*">
+            <Button Margin="5,0,5,0" Grid.Column="0" Padding="0"
+                    Text="Год" Command="{Binding SetFiltrDateCommand}"/>
+            <Button Margin="5,0,5,0" Grid.Column="1" Padding="0"
+                    Text="Студия" Command="{Binding SetFiltrStudioCommand}"/>
+            <Button Margin="5,0,5,0" Grid.Column="2" Padding="0"
+                    Text="Жанр" Command="{Binding SetFiltrGenreCommand}"/>
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <Grid  RowDefinitions="auto, auto, auto, auto">
+                <Label Text="Сериалы:" Margin="25"
+                       FontAttributes="Bold"
+                       FontSize="20"/>
+                <CollectionView Grid.Row="1" ItemsSource="{Binding SerialsFiltr}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout  Span="3" Orientation="Vertical" />
+                        <!-- Количество колонок -->
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="10">
+                                <Frame CornerRadius="10" BackgroundColor="Transparent"
+                           BorderColor="Black">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer 
 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}, Path=TapMediaCommand}"
 CommandParameter="{Binding .}"/>
-                            </Frame.GestureRecognizers>
-                            <Grid>
-                                <Image Source="{Binding Preview}"/>
+                                    </Frame.GestureRecognizers>
+                                    <Image Source="{Binding Media.Preview}"
+                                           WidthRequest="113" HeightRequest="170"/>
+                                </Frame>
                             </Grid>
-                        </Frame>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <CollectionView Grid.Row="3"
+        ItemsSource="{Binding FilmsFiltr}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout  Span="3" Orientation="Vertical" />
+                        <!-- Количество колонок -->
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="10">
+                                <Frame CornerRadius="10" BackgroundColor="Transparent"
+               BorderColor="Black">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer 
+Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}, Path=TapMediaCommand}"
+CommandParameter="{Binding .}"/>
+                                    </Frame.GestureRecognizers>
+                                    <Image Source="{Binding Media.Preview}"
+                                           WidthRequest="113" HeightRequest="170"/>
+                                </Frame>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Label Text="Фильмы:" Margin="25"
+                       FontAttributes="Bold"
+                       FontSize="20" Grid.Row="2"/>
+            </Grid>
+        </ScrollView>
     </Grid>
 </ContentPage>

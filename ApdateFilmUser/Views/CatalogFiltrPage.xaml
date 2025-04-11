@@ -69,13 +69,14 @@
                         <DataTemplate>
                             <Grid Padding="10">
                                 <Frame CornerRadius="10" BackgroundColor="Transparent"
-                           BorderColor="Transparent">
+                           BorderColor="Black">
                                     <Frame.GestureRecognizers>
                                         <TapGestureRecognizer 
 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CatalogFiltrViewModel}}, Path=TapMediaCommand}"
 CommandParameter="{Binding .}"/>
                                     </Frame.GestureRecognizers>
-                                    <Image Source="{Binding Preview}"/>
+                                    <Image Source="{Binding Preview}"
+                                           WidthRequest="113" HeightRequest="170"/>
                                 </Frame>
                             </Grid>
                         </DataTemplate>
@@ -91,13 +92,14 @@ CommandParameter="{Binding .}"/>
                         <DataTemplate>
                             <Grid Padding="10">
                                 <Frame CornerRadius="10" BackgroundColor="Transparent"
-               BorderColor="Transparent">
+               BorderColor="Black">
                                     <Frame.GestureRecognizers>
                                         <TapGestureRecognizer 
 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CatalogFiltrViewModel}}, Path=TapMediaCommand}"
 CommandParameter="{Binding .}"/>
                                     </Frame.GestureRecognizers>
-                                    <Image Source="{Binding Preview}"/>
+                                    <Image Source="{Binding Preview}"
+                                           WidthRequest="113" HeightRequest="170"/>
                                 </Frame>
                             </Grid>
                         </DataTemplate>

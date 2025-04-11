@@ -109,7 +109,7 @@ namespace ApdateFilmUser.Servieces
             {
                 var reqwest = new { media_id = id };
 
-                var userResponse = await ApiClient.DeleteAsync($"api/reviews/{id}");
+                var userResponse = await ApiClient.DeleteAsync($"api/favorites/{id}");
 
                 if (userResponse)
                 {
@@ -165,8 +165,7 @@ namespace ApdateFilmUser.Servieces
             }
             return false;
         }
-
-        public static async Task<List<Media>> GetMediaFavoriteAsync()
+        public static async Task<List<FavoriteMedia>> GetMediaFavoriteAsync()
         {
             try
             {
@@ -178,19 +177,15 @@ namespace ApdateFilmUser.Servieces
                     return null;
                 }
 
-                var mediaListResponse_ = JsonSerializer.Deserialize<List<List<Media>>>(mediaResponse, ApiClient.options);
+                var mediaListResponse = JsonSerializer.Deserialize<List<FavoriteMedia>>(mediaResponse, ApiClient.options);
 
-                var result = new List<Media>();
-                foreach (var media in mediaListResponse_)
+
+                foreach (var media in mediaListResponse)
                 {
-                    foreach (var item in media)
-                    {
-                        item.Preview = $"{ApiClient.GetURL()}/storage/{item.Preview}";
-                        result.Add(item);
-                    }
+                    media.Media.Preview = $"{ApiClient.GetURL()}/storage/{media.Media.Preview}";
                 }
 
-                return result;
+                return mediaListResponse;
             }
             catch (Exception ex)
             {

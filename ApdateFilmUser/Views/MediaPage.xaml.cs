@@ -95,15 +95,15 @@ public partial class MediaPage : ContentPage
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
-        if (_checkFavorite)
+        if (!_checkFavorite)
         {
             MediaServiec.AddToFavoriteAsync(MediaItem.Id);
-            _checkFavorite = false;
+            _checkFavorite = true;
         }
         else
         {
             MediaServiec.DeleteToFavoriteAsync(MediaItem.Id);
-            _checkFavorite = true;
+            _checkFavorite = false;
         }
 
         CheckFavorite.Source = (_checkFavorite) ? "checkfavorites.png" : "close.png";

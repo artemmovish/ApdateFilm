@@ -1,4 +1,5 @@
 ﻿using ApdateFilmUser.Models;
+using ApdateFilmUser.Services.API;
 using ApdateFilmUser.Servieces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -43,7 +44,7 @@ namespace ApdateFilmUser.ViewModels
                     await Task.Delay(10000);
                 }
             }
-            await Shell.Current.DisplayAlert("Ошибка загрузки", "Долгий ответ от сервера, попробуйте позже", "ОК");
+            await Shell.Current.DisplayAlert("Ошибка загрузки", $"Долгий ответ от сервера, попробуйте позже\n{ApiClient.GetURL()}", "ОК");
             
         }
 

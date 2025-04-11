@@ -32,6 +32,8 @@ namespace ApdateFilmUser.ViewModels
         [ObservableProperty]
         ObservableCollection<DateTime> yers;
 
+        [ObservableProperty]
+        ObservableCollection<Studio> studios;
 
         Genre SelectedGenre;
         DateTime? SelectedDate;
@@ -78,6 +80,7 @@ namespace ApdateFilmUser.ViewModels
                 }
 
                 Genres = new ObservableCollection<Genre>(await MediaServiec.GetGenreAsync());
+                Studios = new ObservableCollection<Studio>(await MediaServiec.GetStudioAsync());
 
                 FilmsFiltr = new ObservableCollection<Media>(Films);
                 SerialsFiltr = new ObservableCollection<Media>(Serials);
@@ -220,7 +223,7 @@ namespace ApdateFilmUser.ViewModels
             try
             {
                 // Преобразуем года в строки и создаем массив
-                var answers = Genres.Select(item => item.Name.ToString()).ToArray();
+                var answers = Studios.Select(item => item.Name.ToString()).ToArray();
 
                 // Показываем ActionSheet для выбора года
                 string result = await Shell.Current.DisplayActionSheet(
