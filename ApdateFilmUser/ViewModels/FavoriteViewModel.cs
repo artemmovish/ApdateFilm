@@ -45,7 +45,6 @@ namespace ApdateFilmUser.ViewModels
             Genres = new ObservableCollection<Genre>();
             Yers = new ObservableCollection<DateTime>();
             Studios = new ObservableCollection<Studio>();
-            LoadMedia();
         }
 
         [RelayCommand]

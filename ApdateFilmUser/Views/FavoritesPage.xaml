@@ -46,7 +46,7 @@
 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}, Path=TapMediaCommand}"
 CommandParameter="{Binding .}"/>
                                     </Frame.GestureRecognizers>
-                                    <Image Source="{Binding Media.Preview}"
+                                    <Image Source="{Binding Preview}"
                                            WidthRequest="113" HeightRequest="170"/>
                                 </Frame>
                             </Grid>
@@ -69,10 +69,11 @@ CommandParameter="{Binding .}"/>
 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}, Path=TapMediaCommand}"
 CommandParameter="{Binding .}"/>
                                     </Frame.GestureRecognizers>
-                                    <Image Source="{Binding Media.Preview}"
+                                    <Image Source="{Binding Preview}"
                                            WidthRequest="113" HeightRequest="170"/>
                                 </Frame>
                             </Grid>
+                            
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

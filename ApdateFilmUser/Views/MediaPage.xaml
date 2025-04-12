@@ -91,7 +91,11 @@
                            FontSize="30"/>
                 </StackLayout>
                 <StackLayout>
-                    <Image Source="actorsicon.png"/>
+                    <Image Source="actorsicon.png">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"/>
+                        </Image.GestureRecognizers>
+                    </Image>
                     <Label Text="Актерский состав"
                            Opacity="0.7"/>
                 </StackLayout>

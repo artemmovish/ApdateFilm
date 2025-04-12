@@ -65,6 +65,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<MauiXaml Update="Views\ActorsPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\AuthViews\AuthPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

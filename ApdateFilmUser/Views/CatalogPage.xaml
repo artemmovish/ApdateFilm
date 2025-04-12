@@ -63,7 +63,7 @@
                     Padding="0" 
                     CornerRadius="10"
                     HeightRequest="380"
-                            Scale="{Binding IsSelected, Converter={StaticResource ScaleConverter}}">
+                    Scale="{Binding IsSelected, Converter={StaticResource ScaleConverter}}">
 
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer 

@@ -88,9 +88,11 @@ public partial class MediaPage : ContentPage
         await Shell.Current.GoToAsync("../");
     }
 
-    private void Button_Clicked_1(object sender, EventArgs e)
+    private async void Button_Clicked_1(object sender, EventArgs e)
     {
         MediaServiec.AddReviewAsync(MediaItem.Id, ReviewEntry.Text, _selectedRating);
+        MediaItem = await MediaServiec.GetMediaAsync(MediaItem.Id);
+        BindingContext = MediaItem;
     }
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
@@ -102,10 +104,17 @@ public partial class MediaPage : ContentPage
         }
         else
         {
-            MediaServiec.DeleteToFavoriteAsync(MediaItem.Id);
+            MediaServiec.DeleteFromFavoriteAsync(MediaItem.Id);
             _checkFavorite = false;
         }
 
         CheckFavorite.Source = (_checkFavorite) ? "checkfavorites.png" : "close.png";
+    }
+
+    private async void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync("actors",
+                 new Dictionary<string, object> { { "actors", MediaItem.Actors } });
+
     }
 }
