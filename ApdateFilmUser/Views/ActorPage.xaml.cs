@@ -1,4 +1,5 @@
 using ApdateFilmUser.Models;
+using ApdateFilmUser.ViewModels;
 using ApdateFilmUser.ViewModels.AuthViewModels;
 
 namespace ApdateFilmUser.Views;

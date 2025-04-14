@@ -1,4 +1,5 @@
 ﻿using ApdateFilmUser.Models;
+using ApdateFilmUser.Servieces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
@@ -9,7 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace ApdateFilmUser.ViewModels.AuthViewModels
+namespace ApdateFilmUser.ViewModels
 {
     partial class ActorViewModel : ObservableObject
     {
@@ -26,9 +27,9 @@ namespace ApdateFilmUser.ViewModels.AuthViewModels
         {
             if (selectedItem is Media media)
             {
-                var serializedItem = JsonSerializer.Serialize(media);
+                var item = await MediaServiec.GetMediaAsync(media.Id);
                 await Shell.Current.GoToAsync("media",
-                    new Dictionary<string, object> { { "media", media } });
+                    new Dictionary<string, object> { { "media", item } });
             }
         }
     }

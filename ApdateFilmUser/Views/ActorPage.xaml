@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ApdateFilmUser.ViewModels"
              x:Class="ApdateFilmUser.Views.ActorPage"
              Title="ActorPage">
 
@@ -24,10 +25,18 @@
             </Frame>
 
             <!-- Имя и фамилия -->
-            <Label Text="{Binding Actor.FullName}"
-           FontSize="28"
-           FontAttributes="Bold"
-           HorizontalOptions="Center"/>
+            <HorizontalStackLayout HorizontalOptions="Center">
+                <Label Text="{Binding Actor.Name}"
+FontSize="28"
+FontAttributes="Bold"
+HorizontalOptions="Center"/>
+                <Label Text="{Binding Actor.Surname}"
+                       Margin="5,0,0,0"
+FontSize="28"
+FontAttributes="Bold"
+HorizontalOptions="Center"/>
+            </HorizontalStackLayout>
+            
 
             <!-- Дата рождения -->
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
@@ -52,7 +61,6 @@
 
             <CollectionView ItemsSource="{Binding Actor.Media}"
                    SelectionMode="Single"
-                   SelectionChangedCommand="{Binding MediaSelectedCommand}"
                    HeightRequest="240">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Horizontal" ItemSpacing="15"/>
@@ -63,6 +71,11 @@
                        HeightRequest="220"
                        CornerRadius="10"
                        Padding="0">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ActorViewModel}}, Path=MediaSelectedCommand}"
+                                CommandParameter="{Binding .}"/>
+                            </Frame.GestureRecognizers>
                             <Grid>
                                 <Image Source="{Binding Preview}"
                                Aspect="Fill"
