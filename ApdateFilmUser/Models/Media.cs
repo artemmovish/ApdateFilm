@@ -22,6 +22,7 @@ namespace ApdateFilmUser.Models
         public int? Episodes { get; set; }
         public string Preview { get; set; }
         public string ContentURL { get; set; }
+        public List<Footage> Footages { get; set; }
         public List<Genre> Genres { get; set; }
         public List<Director> Directors { get; set; }
         public List<Actor> Actors { get; set; }

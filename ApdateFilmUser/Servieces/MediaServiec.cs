@@ -26,6 +26,10 @@ namespace ApdateFilmUser.Servieces
                 foreach (var media in mediaListResponse)
                 {
                     media.Preview = $"{ApiClient.GetURL()}/storage/{media.Preview}";
+                    foreach (var item in media.Footages)
+                    {
+                        item.Photo = $"{ApiClient.GetURL()}/storage/{item.Photo}";
+                    }
                 }
 
                 return mediaListResponse;
@@ -236,7 +240,6 @@ namespace ApdateFilmUser.Servieces
 
             return null;
         }
-
         public static async Task<Actor> GetActorAsync(int id)
         {
             try
@@ -252,6 +255,30 @@ namespace ApdateFilmUser.Servieces
                 var mediaResponse = JsonSerializer.Deserialize<ActorResponse>(mediaReqwest, ApiClient.options);
 
                 return mediaResponse.Actor;
+            }
+            catch (Exception ex)
+            {
+                ApiClient.HandleException(ex);
+            }
+
+            return null;
+        }
+
+        public static async Task<Director> GetDirectorAsync(int id)
+        {
+            try
+            {
+                var directorReqwest = await ApiClient.GetAsync($"api/directors/{id}");
+
+                if (String.IsNullOrEmpty(directorReqwest))
+                {
+                    Debug.WriteLine("Ответ от сервера пустой");
+                    return null;
+                }
+
+                var directorResponse = JsonSerializer.Deserialize<DirectorResponse>(directorReqwest, ApiClient.options);
+
+                return directorResponse.Director;
             }
             catch (Exception ex)
             {

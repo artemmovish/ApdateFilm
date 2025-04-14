@@ -14,8 +14,8 @@
     <ScrollView>
         <VerticalStackLayout Spacing="10">
             <!-- Изображение фильма (заменено на WebView) -->
-            <WebView Source="{Binding ContentURL}"
-             HeightRequest="240" />
+            <WebView x:Name="TrailerView" Source="{Binding ContentURL}" Margin="0,-50,0,0"
+             HeightRequest="290"/>
 
             <!-- Заголовок (без Frame) -->
             <VerticalStackLayout Padding="10">
@@ -99,8 +99,49 @@
                     <Label Text="Актерский состав"
                            Opacity="0.7"/>
                 </StackLayout>
+                <StackLayout>
+                    <Image Source="director.png" HeightRequest="48">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_2"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Режисёр"
+           Opacity="0.7"/>
+                </StackLayout>
             </HorizontalStackLayout>
 
+            <StackLayout Padding="10">
+                <Label Text="Кадры:"/>
+                <CollectionView ItemsSource="{Binding Footages}"
+                HorizontalScrollBarVisibility="Never"
+                VerticalScrollBarVisibility="Never"
+                HorizontalOptions="Center">
+
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="15" />
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame HasShadow="True"
+                   CornerRadius="10"
+                   Padding="0"
+                   HeightRequest="120"
+                   WidthRequest="150"
+                   BackgroundColor="Transparent">
+
+                                <Image Source="{Binding Photo}"
+                       Aspect="AspectFill"
+                       HeightRequest="120"
+                       WidthRequest="150"/>
+
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+            </StackLayout>
+            
             <Frame BackgroundColor="Transparent" Margin="5">
                 <Grid RowDefinitions="*, auto, auto, auto">
                     <!-- Поле для отзыва -->

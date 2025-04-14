@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.Maui.Devices;
 
 namespace ApdateFilmUser.Views;
 
@@ -18,9 +19,24 @@ public partial class MediaPage : ContentPage
     public Media MediaItem { get; set; }
 
     public MediaPage()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         InitializeRatingControls();
+
+        // Подписываемся на изменение ориентации
+        DeviceDisplay.Current.MainDisplayInfoChanged += OnDisplayInfoChanged;
+        UpdateWebViewHeight();
+    }
+
+    private void OnDisplayInfoChanged(object sender, DisplayInfoChangedEventArgs e)
+    {
+        UpdateWebViewHeight();
+    }
+
+    private void UpdateWebViewHeight()
+    {
+        var displayInfo = DeviceDisplay.Current.MainDisplayInfo;
+        TrailerView.HeightRequest = displayInfo.Orientation == DisplayOrientation.Portrait ? 290 : 490;
     }
 
     private void InitializeRatingControls()
@@ -75,12 +91,11 @@ public partial class MediaPage : ContentPage
 
         CheckFavorite.Source = (_checkFavorite) ? "checkfavorites.png" : "close.png";
     }
-
-    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    protected override void OnDisappearing()
     {
-        base.OnNavigatedTo(args);
-        BindingContext = MediaItem;
-        InitializeFavorite();
+        base.OnDisappearing();
+        // Отписываемся от события при закрытии страницы
+        DeviceDisplay.Current.MainDisplayInfoChanged -= OnDisplayInfoChanged;
     }
 
     private async void Button_Clicked(object sender, EventArgs e)
@@ -115,6 +130,18 @@ public partial class MediaPage : ContentPage
     {
         await Shell.Current.GoToAsync("actors",
                  new Dictionary<string, object> { { "actors", MediaItem.Actors } });
+    }
 
+    private async void TapGestureRecognizer_Tapped_2(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync("director",
+                 new Dictionary<string, object> { { "director", MediaItem.Directors } });
+    }
+
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+        BindingContext = MediaItem;
+        InitializeFavorite();
     }
 }
