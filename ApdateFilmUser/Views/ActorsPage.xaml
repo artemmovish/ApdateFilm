@@ -30,6 +30,11 @@
                     <Frame HasShadow="True" BorderColor="#EEEEEE" Padding="0" CornerRadius="15"
                            BackgroundColor="Transparent" Margin="10"
                            Scale="{Binding IsSelected, Converter={StaticResource ScaleConverter}}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ActorsViewModel}}, Path=TapActorCommand}"
+                                CommandParameter="{Binding .}"/>
+                        </Frame.GestureRecognizers>
                         <Grid>
                             <!-- Фото актера -->
                             <Image Source="{Binding Photo}" Aspect="AspectFill" 

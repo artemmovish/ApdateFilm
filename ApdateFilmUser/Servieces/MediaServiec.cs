@@ -37,7 +37,6 @@ namespace ApdateFilmUser.Servieces
 
             return null;
         }
-
         public static async Task<Media> GetMediaAsync(int id)
         {
             try
@@ -229,6 +228,30 @@ namespace ApdateFilmUser.Servieces
                 }
 
                 return mediaListResponse;
+            }
+            catch (Exception ex)
+            {
+                ApiClient.HandleException(ex);
+            }
+
+            return null;
+        }
+
+        public static async Task<Actor> GetActorAsync(int id)
+        {
+            try
+            {
+                var mediaReqwest = await ApiClient.GetAsync($"api/actors/{id}");
+
+                if (String.IsNullOrEmpty(mediaReqwest))
+                {
+                    Debug.WriteLine("Ответ от сервера пустой");
+                    return null;
+                }
+
+                var mediaResponse = JsonSerializer.Deserialize<ActorResponse>(mediaReqwest, ApiClient.options);
+
+                return mediaResponse.Actor;
             }
             catch (Exception ex)
             {

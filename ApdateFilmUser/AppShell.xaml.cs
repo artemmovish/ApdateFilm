@@ -16,6 +16,8 @@ namespace ApdateFilmUser
             Routing.RegisterRoute("catalogfiltr", typeof(CatalogFiltrPage));
             Routing.RegisterRoute("media", typeof(MediaPage));
             Routing.RegisterRoute("actors", typeof(ActorsPage));
+            Routing.RegisterRoute("actor", typeof(ActorPage));
+
         }
     }
 }
