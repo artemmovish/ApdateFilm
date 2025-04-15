@@ -28,8 +28,7 @@
             <CarouselView.ItemTemplate>
                 <DataTemplate>
                     <Frame HasShadow="True" BorderColor="#EEEEEE" Padding="0" CornerRadius="15"
-                           BackgroundColor="Transparent" Margin="10"
-                           Scale="{Binding IsSelected, Converter={StaticResource ScaleConverter}}">
+                           BackgroundColor="Transparent" Margin="10">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer 
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ActorsViewModel}}, Path=TapActorCommand}"
@@ -38,7 +37,7 @@
                         <Grid>
                             <!-- Фото актера -->
                             <Image Source="{Binding Photo}" Aspect="AspectFill" 
-               HeightRequest="200" WidthRequest="140"/>
+               HeightRequest="330" WidthRequest="240"/>
 
                             <!-- Затемнение внизу для текста -->
                             <BoxView Color="#80000000" VerticalOptions="End" 

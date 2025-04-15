@@ -38,7 +38,7 @@ namespace ApdateFilmUser.ViewModels.AuthViewModels
             Name = user.Name;
             Email = user.Email;
             Birthday = user.Birthday;
-            Avatar = $"{ApiClient.GetURL()}/storage/" + user.Avatar;
+            Avatar = user.Avatar;
         }
 
         [RelayCommand]

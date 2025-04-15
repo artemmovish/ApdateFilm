@@ -82,9 +82,13 @@ public partial class MediaPage : ContentPage
 
     private async Task InitializeFavorite()
     {
+
+
         foreach (var item in MediaItem.Review)
         {
-            item.User.Avatar = $"{ApiClient.GetURL()}/storage/" + item.User.Avatar;
+            item.User.Avatar = item.User.Avatar.Contains("assets")
+                ? $"{ApiClient.GetURL()}/{item.User.Avatar}"
+                : $"{ApiClient.GetURL()}/storage/{item.User.Avatar}";
         }
 
         _checkFavorite = await MediaServiec.CheckFavoriteAsync(MediaItem.Id);

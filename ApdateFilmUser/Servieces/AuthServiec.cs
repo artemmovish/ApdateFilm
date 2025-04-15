@@ -125,6 +125,11 @@ namespace ApdateFilmUser.Servieces
                     // Устанавливаем токен в ApdateFilmUserClient
                     ApiClient.SetToken(authResponse.Token);
                     Debug.WriteLine("Токен успешно установлен.");
+
+                    authResponse.User.Avatar = authResponse.User.Avatar.Contains("assets")
+                        ? $"{ApiClient.GetURL()}/{authResponse.User.Avatar}"
+                        : $"{ApiClient.GetURL()}/storage/{authResponse.User.Avatar}";
+
                     return authResponse.User;
                 }
                 else
@@ -152,6 +157,10 @@ namespace ApdateFilmUser.Servieces
                 }
 
                 var authResponse = JsonSerializer.Deserialize<UserResponse>(userResponse, ApiClient.options);
+
+                authResponse.User.Avatar = authResponse.User.Avatar.Contains("assets")
+                        ? $"{ApiClient.GetURL()}/{authResponse.User.Avatar}"
+                        : $"{ApiClient.GetURL()}/storage/{authResponse.User.Avatar}";
 
                 return authResponse.User;
             }

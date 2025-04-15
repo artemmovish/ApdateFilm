@@ -25,10 +25,22 @@ namespace ApdateFilmUser.Servieces
 
                 foreach (var media in mediaListResponse)
                 {
-                    media.Preview = $"{ApiClient.GetURL()}/storage/{media.Preview}";
+                    media.Preview = media.Preview.Contains("assets")
+                        ? $"{ApiClient.GetURL()}/{media.Preview}"
+                        : $"{ApiClient.GetURL()}/storage/{media.Preview}";
+
                     foreach (var item in media.Footages)
                     {
-                        item.Photo = $"{ApiClient.GetURL()}/storage/{item.Photo}";
+                        item.Photo = item.Photo.Contains("assets")
+                            ? $"{ApiClient.GetURL()}/{item.Photo}"
+                            : $"{ApiClient.GetURL()}/storage/{item.Photo}";
+                    }
+
+                    foreach (var item in media.Actors)
+                    {
+                        item.Photo = item.Photo.Contains("assets")
+                            ? $"{ApiClient.GetURL()}/{item.Photo}"
+                            : $"{ApiClient.GetURL()}/storage/{item.Photo}";
                     }
                 }
 
@@ -228,10 +240,12 @@ namespace ApdateFilmUser.Servieces
 
                 foreach (var media in mediaListResponse)
                 {
-                    media.Media.Preview = $"{ApiClient.GetURL()}/storage/{media.Media.Preview}";
+                    media.Media.Preview = media.Media.Preview.Contains("assets")
+                        ? $"{ApiClient.GetURL()}/{media.Media.Preview}"
+                        : $"{ApiClient.GetURL()}/storage/{media.Media.Preview}";
                 }
 
-                return mediaListResponse;
+                    return mediaListResponse;
             }
             catch (Exception ex)
             {
@@ -254,6 +268,17 @@ namespace ApdateFilmUser.Servieces
 
                 var mediaResponse = JsonSerializer.Deserialize<ActorResponse>(mediaReqwest, ApiClient.options);
 
+                mediaResponse.Actor.Photo = mediaResponse.Actor.Photo.Contains("assets")
+                        ? $"{ApiClient.GetURL()}/{mediaResponse.Actor.Photo}"
+                        : $"{ApiClient.GetURL()}/storage/{mediaResponse.Actor.Photo}";
+
+                foreach (var media in mediaResponse.Actor.Media)
+                {
+                    media.Preview = media.Preview.Contains("assets")
+                        ? $"{ApiClient.GetURL()}/{media.Preview}"
+                        : $"{ApiClient.GetURL()}/storage/{media.Preview}";
+                }
+
                 return mediaResponse.Actor;
             }
             catch (Exception ex)
@@ -263,7 +288,6 @@ namespace ApdateFilmUser.Servieces
 
             return null;
         }
-
         public static async Task<Director> GetDirectorAsync(int id)
         {
             try
@@ -277,6 +301,12 @@ namespace ApdateFilmUser.Servieces
                 }
 
                 var directorResponse = JsonSerializer.Deserialize<DirectorResponse>(directorReqwest, ApiClient.options);
+
+                directorResponse.Director.Photo = directorResponse.Director.Photo.Contains("assets")
+                        ? $"{ApiClient.GetURL()}/{directorResponse.Director.Photo}"
+                        : $"{ApiClient.GetURL()}/storage/{directorResponse.Director.Photo}";
+
+
 
                 return directorResponse.Director;
             }
