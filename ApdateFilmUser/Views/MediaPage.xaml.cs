@@ -147,5 +147,6 @@ public partial class MediaPage : ContentPage
         base.OnNavigatedTo(args);
         BindingContext = MediaItem;
         InitializeFavorite();
+        TrailerView.HeightRequest = 380;
     }
 }

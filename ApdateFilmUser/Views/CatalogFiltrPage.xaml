@@ -60,26 +60,31 @@
                 <Label Text="Сериалы:" Margin="25"
                        FontAttributes="Bold"
                        FontSize="20"/>
+                
                 <CollectionView Grid.Row="1" ItemsSource="{Binding SerialsFiltr}">
                     <CollectionView.ItemsLayout>
-                        <GridItemsLayout  Span="3" Orientation="Vertical" />
+                        <GridItemsLayout Span="3" Orientation="Vertical" />
                         <!-- Количество колонок -->
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame CornerRadius="10" BackgroundColor="Transparent"
-                           BorderColor="Transparent">
+                   BorderColor="Transparent"
+                   Padding="0" Margin="5"
+                   HasShadow="False"
+                   IsClippedToBounds="True">
                                 <Frame.GestureRecognizers>
                                     <TapGestureRecognizer 
-Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CatalogFiltrViewModel}}, Path=TapMediaCommand}"
-CommandParameter="{Binding .}"/>
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CatalogFiltrViewModel}}, Path=TapMediaCommand}"
+                        CommandParameter="{Binding .}"/>
                                 </Frame.GestureRecognizers>
                                 <Image Source="{Binding Preview}"
-                                           WidthRequest="113" HeightRequest="170"/>
+                       Aspect="AspectFill"/>
                             </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+
                 <CollectionView Grid.Row="3"
         ItemsSource="{Binding FilmsFiltr}">
                     <CollectionView.ItemsLayout>
@@ -88,18 +93,19 @@ CommandParameter="{Binding .}"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Padding="10">
-                                <Frame CornerRadius="10" BackgroundColor="Transparent"
-               BorderColor="Transparent">
-                                    <Frame.GestureRecognizers>
-                                        <TapGestureRecognizer 
-Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CatalogFiltrViewModel}}, Path=TapMediaCommand}"
-CommandParameter="{Binding .}"/>
-                                    </Frame.GestureRecognizers>
-                                    <Image Source="{Binding Preview}"
-                                           WidthRequest="113" HeightRequest="170"/>
-                                </Frame>
-                            </Grid>
+                            <Frame CornerRadius="10" BackgroundColor="Transparent"
+BorderColor="Transparent"
+Padding="0" Margin="5"
+HasShadow="False"
+IsClippedToBounds="True">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer 
+     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CatalogFiltrViewModel}}, Path=TapMediaCommand}"
+     CommandParameter="{Binding .}"/>
+                                </Frame.GestureRecognizers>
+                                <Image Source="{Binding Preview}"
+    Aspect="AspectFill"/>
+                            </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

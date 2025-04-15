@@ -7,7 +7,7 @@ public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp()
 	{
-        ApiClient.Initialize("https://66f0e5c5-781d-47de-95f6-610cb04e0991.tunnel4.com");
+        ApiClient.Initialize("https://0ae52c5f-5232-446d-9c15-d0e11ac0ebc1.tunnel4.com");
 
         var builder = MauiApp.CreateBuilder();
 		builder

@@ -63,7 +63,7 @@ CommandParameter="{Binding .}"/>
                         <DataTemplate>
                             <Grid Padding="10">
                                 <Frame CornerRadius="10" BackgroundColor="Transparent"
-               BorderColor="Black">
+               BorderColor="Transparent">
                                     <Frame.GestureRecognizers>
                                         <TapGestureRecognizer 
 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FavoriteViewModel}}, Path=TapMediaCommand}"

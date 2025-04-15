@@ -14,8 +14,13 @@
     <ScrollView>
         <VerticalStackLayout Spacing="10">
             <!-- Изображение фильма (заменено на WebView) -->
-            <WebView x:Name="TrailerView" Source="{Binding ContentURL}" Margin="0,-50,0,0"
-             HeightRequest="290"/>
+            <Grid>
+                <WebView x:Name="TrailerView" Source="{Binding ContentURL}" Margin="0,-90,0,0"
+ HeightRequest="380"/>
+                <Rectangle WidthRequest="400" HeightRequest="70" Background="Black"
+                           VerticalOptions="End"/>
+            </Grid>
+            
 
             <!-- Заголовок (без Frame) -->
             <VerticalStackLayout Padding="10">

@@ -188,7 +188,7 @@ namespace ApdateFilmUser.Servieces
         {
             try
             {
-                var checkResponse = await ApiClient.GetAsync($"api/favorites/{id}");
+                var checkResponse = await ApiClient.GetAsync($"api/favorites/media/{id}");
 
                 if (string.IsNullOrEmpty(checkResponse))
                 {
