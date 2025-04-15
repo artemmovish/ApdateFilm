@@ -54,9 +54,8 @@
                                    FontSize="24"
                                    FontAttributes="Bold"
                                    TextColor="White"
-                                   Margin="5,0,0,0"
-                                   HorizontalOptions="Center"
-Margin="0,0,0,10"/>
+                                   Margin="5,0,0,10"
+                                   HorizontalOptions="Center"/>
                         </StackLayout>
                         
 
