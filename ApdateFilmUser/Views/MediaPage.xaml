@@ -15,10 +15,10 @@
         <VerticalStackLayout Spacing="10">
             <!-- Изображение фильма (заменено на WebView) -->
             <Grid>
-                <WebView x:Name="TrailerView" Source="{Binding ContentURL}" Margin="0,-90,0,0"
- HeightRequest="380"/>
-                <Rectangle WidthRequest="400" HeightRequest="70" Background="Black"
-                           VerticalOptions="End"/>
+                <WebView x:Name="TrailerView" Source="{Binding ContentURL}" Margin="0,-120,0,0"
+ HeightRequest="340"/>
+                <!--<Rectangle WidthRequest="500" HeightRequest="30"  Background="Black"S
+                           VerticalOptions="End"/>-->
             </Grid>
             
 
