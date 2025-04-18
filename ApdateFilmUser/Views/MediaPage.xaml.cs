@@ -25,7 +25,14 @@ public partial class MediaPage : ContentPage
 
         // Подписываемся на изменение ориентации
         DeviceDisplay.Current.MainDisplayInfoChanged += OnDisplayInfoChanged;
+        SetSize();
         UpdateWebViewHeight();
+    }
+
+    async Task SetSize()
+    {
+        await Task.Delay(2000);
+        TrailerView.HeightRequest = 340;
     }
 
     private void OnDisplayInfoChanged(object sender, DisplayInfoChangedEventArgs e)
@@ -36,7 +43,20 @@ public partial class MediaPage : ContentPage
     private void UpdateWebViewHeight()
     {
         var displayInfo = DeviceDisplay.Current.MainDisplayInfo;
-        TrailerView.HeightRequest = displayInfo.Orientation == DisplayOrientation.Portrait ? 290 : 490;
+
+        if (displayInfo.Orientation == DisplayOrientation.Portrait)
+        {
+            TrailerView.HeightRequest = 340;
+            Shell.SetTabBarIsVisible(this, true);
+        }
+        else
+        {
+            TrailerView.HeightRequest = 480;
+            Shell.SetTabBarIsVisible(this, false);
+
+        }
+
+
     }
 
     private void InitializeRatingControls()
