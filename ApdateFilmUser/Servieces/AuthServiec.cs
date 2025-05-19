@@ -170,7 +170,6 @@ namespace ApdateFilmUser.Servieces
             }
             return null;
         }
-
         public static async Task LogoutAsync()
         {
             try

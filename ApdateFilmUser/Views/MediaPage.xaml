@@ -68,15 +68,24 @@
                TextColor="White" />
             </VerticalStackLayout>
 
-            <!-- Кнопка воспроизведения -->
-            <Button Text="Назад"
-                    BackgroundColor="#2563EB"
-                    TextColor="White"
-                    FontSize="18"
-                    CornerRadius="10"
-                    Margin="20,10" 
-                    Clicked="Button_Clicked"/>
-
+            <!-- Кнопка воспроизведения и выбора серий -->
+            <Grid ColumnDefinitions="*,*">
+                <Button Text="Назад" x:Name="GoBack"
+                        BackgroundColor="#2563EB"
+                        TextColor="White"
+                        FontSize="18"
+                        CornerRadius="10"
+                        Margin="20,10" 
+                        Clicked="GoBack_Clicked"/>
+                <Button Text="Выбрать" x:Name="SelectSeries"
+                        Grid.Column="1"
+                        BackgroundColor="#2563EB"
+                        TextColor="White"
+                        FontSize="18"
+                        CornerRadius="10"
+                        Margin="20,10" 
+                        Clicked="SelectSeries_Clicked"/>
+            </Grid>
             <!-- Нижние элементы -->
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
                 <StackLayout>
@@ -169,7 +178,56 @@
                 Clicked="Button_Clicked_1"/>
                 </Grid>
             </Frame>
+            
+            <Label Text="Ваши отзывы"
+                   Margin="10,0,0,0"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="White" />
 
+            <CollectionView x:Name="MyReviewsCollection">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="10" BackgroundColor="Transparent">
+                            <Grid RowDefinitions="auto, *" ColumnDefinitions="*, auto">
+                                <!-- Основной контент -->
+                                <StackLayout Orientation="Horizontal" Spacing="10" Grid.Column="0">
+                                    <Image Source="{Binding User.Avatar}" 
+                               HeightRequest="26" WidthRequest="26"/>
+                                    <Label Text="{Binding User.Name}"
+                               FontSize="16"/>
+                                    <Frame CornerRadius="16" Padding="0" BackgroundColor="#2563EB"
+                               WidthRequest="26" HeightRequest="26">
+                                        <Label HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   Text="{Binding Rating}"/>
+                                    </Frame>
+                                </StackLayout>
+
+                                <Label Grid.Row="1" Grid.Column="0"
+                           Text="{Binding Text}"/>
+
+                                <!-- Кнопка удаления -->
+                                <ImageButton x:Name="DeleteRewiews"
+                                    Grid.Column="1" Grid.RowSpan="2"
+                                 Source="close.png"  
+                                 BackgroundColor="Transparent"
+                                 WidthRequest="30"
+                                 HeightRequest="30"
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="End"
+                                 Clicked="DeleteRewiews_Clicked"/>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Label Text="Отзывы:"
+       Margin="10,0,0,0"
+       FontSize="24"
+       FontAttributes="Bold"
+       TextColor="White" />
             <CollectionView ItemsSource="{Binding Review}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>

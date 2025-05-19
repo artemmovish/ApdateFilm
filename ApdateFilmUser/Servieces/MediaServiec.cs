@@ -76,6 +76,50 @@ namespace ApdateFilmUser.Servieces
 
             return null;
         }
+        public static async Task<List<Series>> GetSeriesAsync(int mediaId)
+        {
+            try
+            {
+                var seriesResponse = await ApiClient.GetAsync($"api/series?media_id={mediaId}");
+
+                if (String.IsNullOrEmpty(seriesResponse))
+                {
+                    Debug.WriteLine("Ответ от сервера пустой");
+                    return null;
+                }
+
+                var seriesList = JsonSerializer.Deserialize<List<Series>>(seriesResponse, ApiClient.options);
+
+                return seriesList;
+            }
+            catch (Exception ex)
+            {
+                ApiClient.HandleException(ex);
+                return null;
+            }
+        }
+        public static async Task<Series> GetSeriesAsync(int mediaId, int seriesNumber)
+        {
+            try
+            {
+                var seriesResponse = await ApiClient.GetAsync($"api/series/show?media_id={mediaId}&series_number={seriesNumber}");
+
+                if (String.IsNullOrEmpty(seriesResponse))
+                {
+                    Debug.WriteLine("Ответ от сервера пустой");
+                    return null;
+                }
+
+                var series = JsonSerializer.Deserialize<Series>(seriesResponse, ApiClient.options);
+
+                return series;
+            }
+            catch (Exception ex)
+            {
+                ApiClient.HandleException(ex);
+                return null;
+            }
+        }
         public static async Task<List<Genre>> GetGenreAsync()
         {
             try

@@ -1,5 +1,4 @@
-﻿
-using ApdateFilmUser.Models;
+﻿using ApdateFilmUser.Models;
 using ApdateFilmUser.Servieces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -35,6 +34,9 @@ namespace ApdateFilmUser.ViewModels
         [ObservableProperty]
         ObservableCollection<Studio> studios;
 
+        [ObservableProperty]
+        private string searchText;
+
         Genre SelectedGenre;
         DateTime? SelectedDate;
         Studio SelectedStudio;
@@ -63,6 +65,7 @@ namespace ApdateFilmUser.ViewModels
                 Films.Clear();
                 Serials.Clear();
                 Genres.Clear();
+                Yers.Clear();
 
                 var list = await MediaServiec.GetMediaAsync();
                 if (list == null) return;
@@ -82,8 +85,7 @@ namespace ApdateFilmUser.ViewModels
                 Genres = new ObservableCollection<Genre>(await MediaServiec.GetGenreAsync());
                 Studios = new ObservableCollection<Studio>(await MediaServiec.GetStudioAsync());
 
-                FilmsFiltr = new ObservableCollection<Media>(Films);
-                SerialsFiltr = new ObservableCollection<Media>(Serials);
+                ApplyFilters();
             }
             catch (Exception ex)
             {
@@ -91,12 +93,19 @@ namespace ApdateFilmUser.ViewModels
             }
         }
 
-        private async Task FilterMedia(IEnumerable<Media> source)
+        private void ApplyFilters()
         {
             try
             {
-                // Применяем фильтры последовательно
-                var filteredItems = source.AsEnumerable();
+                // Применяем все фильтры последовательно
+                var filteredItems = Films.Concat(Serials).AsEnumerable();
+
+                // Фильтрация по названию (поиск)
+                if (!string.IsNullOrWhiteSpace(SearchText))
+                {
+                    filteredItems = filteredItems.Where(m =>
+                        m.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
+                }
 
                 // Фильтрация по году
                 if (SelectedDate != null)
@@ -140,24 +149,20 @@ namespace ApdateFilmUser.ViewModels
         {
             try
             {
-                // Преобразуем года в строки и создаем массив
                 var answers = Yers.Select(item => item.Year.ToString()).ToArray();
 
-                // Показываем ActionSheet для выбора года
                 string result = await Shell.Current.DisplayActionSheet(
                     "Выберите год",
                     "Отмена",
                     null,
                     answers);
 
-                // Обрабатываем результат выбора
                 if (result == null || result == "Отмена")
                 {
                     SelectedDate = null;
                 }
                 else
                 {
-                    // Парсим выбранный год и устанавливаем в SelectedDate
                     if (int.TryParse(result, out int selectedYear))
                     {
                         SelectedDate = new DateTime(selectedYear, 1, 1);
@@ -167,14 +172,10 @@ namespace ApdateFilmUser.ViewModels
                         SelectedDate = null;
                     }
                 }
-                // Применяем фильтрацию после выбора
-                FilterMedia(Films.Concat(Films));
-                FilterMedia(Films.Concat(Serials));
-
+                ApplyFilters();
             }
             catch (Exception ex)
             {
-                // Обработка возможных ошибок
                 Console.WriteLine($"[Отладка] Ошибка при выборе года: {ex.Message}");
                 SelectedDate = null;
             }
@@ -185,17 +186,14 @@ namespace ApdateFilmUser.ViewModels
         {
             try
             {
-                // Преобразуем года в строки и создаем массив
                 var answers = Genres.Select(item => item.Name.ToString()).ToArray();
 
-                // Показываем ActionSheet для выбора года
                 string result = await Shell.Current.DisplayActionSheet(
-                    "Выберите год",
+                    "Выберите жанр",
                     "Отмена",
                     null,
                     answers);
 
-                // Обрабатываем результат выбора
                 if (result == null || result == "Отмена")
                 {
                     SelectedGenre = null;
@@ -204,14 +202,10 @@ namespace ApdateFilmUser.ViewModels
                 {
                     SelectedGenre = new Genre(result);
                 }
-
-                // Применяем фильтрацию после выбора
-                FilterMedia(Films.Concat(Films));
-                FilterMedia(Films.Concat(Serials));
+                ApplyFilters();
             }
             catch (Exception ex)
             {
-                // Обработка возможных ошибок
                 Console.WriteLine($"[Отладка] Ошибка при выборе жанра: {ex.Message}");
                 SelectedGenre = null;
             }
@@ -222,17 +216,14 @@ namespace ApdateFilmUser.ViewModels
         {
             try
             {
-                // Преобразуем года в строки и создаем массив
                 var answers = Studios.Select(item => item.Name.ToString()).ToArray();
 
-                // Показываем ActionSheet для выбора года
                 string result = await Shell.Current.DisplayActionSheet(
-                    "Выберите год",
+                    "Выберите студию",
                     "Отмена",
                     null,
                     answers);
 
-                // Обрабатываем результат выбора
                 if (result == null || result == "Отмена")
                 {
                     SelectedStudio = null;
@@ -241,18 +232,24 @@ namespace ApdateFilmUser.ViewModels
                 {
                     SelectedStudio = new Studio(result);
                 }
-
-                // Применяем фильтрацию после выбора
-                FilterMedia(Films.Concat(Films));
-                FilterMedia(Films.Concat(Serials));
+                ApplyFilters();
             }
             catch (Exception ex)
             {
-                // Обработка возможных ошибок
-                Console.WriteLine($"[Отладка] Ошибка при выборе студия: {ex.Message}");
+                Console.WriteLine($"[Отладка] Ошибка при выборе студии: {ex.Message}");
                 SelectedStudio = null;
             }
         }
-    }
+        
+        [RelayCommand]
+        public void PerformSearch()
+        {
+            ApplyFilters();
+        }
 
+        partial void OnSearchTextChanged(string value)
+        {
+            ApplyFilters();
+        }
+    }
 }

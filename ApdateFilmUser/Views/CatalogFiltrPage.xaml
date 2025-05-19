@@ -15,103 +15,138 @@
         <vm:CatalogFiltrViewModel/>
     </ContentPage.BindingContext>
 
-    <Grid RowDefinitions="80, auto, *">
-        <Grid>
-            <Label Text="SmotriKino" Margin="10,10,0,0"
-               FontSize="25" FontAttributes="Italic"/>
-            <Image Source="search.png" Margin="0,0,10,10"
-               HorizontalOptions="End">
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>    
-                </Image.GestureRecognizers>
-            </Image>
-            <StackLayout Orientation="Horizontal"
-                     Margin="40,50,0,0"
-                     Spacing="10"
-                     HeightRequest="30">
-                <Button Text="Рекомендуем" 
-                    WidthRequest="120"
-                    Padding="5"
-                    CornerRadius="15"
-                    TextColor="White"
-                    Background="Transparent"
-                        Clicked="Button_Clicked"/>
-                <Button Text="Категории"
-                    WidthRequest="100"
-                    CornerRadius="15"
-                    Padding="5"
-                    TextColor="White"
-                    Background="#001346"/>
-            </StackLayout>
+    <Grid RowDefinitions="80, 30, auto, *">
+        <!-- Шапка с логотипом и поиском -->
+        <Grid ColumnDefinitions="auto, *, auto">
+            <Label Text="SmotriKino" 
+           Margin="10,0,0,0"
+           FontSize="25" 
+           FontAttributes="Italic"
+           VerticalOptions="Center"/>
+            <SearchBar x:Name="searchBar"
+               Grid.Column="1"
+               Placeholder="Поиск по названию..."
+               Text="{Binding SearchText}"
+               WidthRequest="250"
+               VerticalOptions="Center"
+               HorizontalOptions="End"
+               SearchCommand="{Binding PerformSearchCommand}"/>
+        </Grid>
+        <!-- Кнопки категорий -->
+        <StackLayout Orientation="Horizontal"
+             Grid.Row="1"
+         Margin="40,0,0,0"
+         Spacing="10"
+         HeightRequest="30">
+            <Button Text="Рекомендуем" 
+        WidthRequest="120"
+        Padding="5"
+        CornerRadius="15"
+        TextColor="White"
+        Background="Transparent"/>
+            <Button Text="Категории"
+        WidthRequest="100"
+        CornerRadius="15"
+        Padding="5"
+        TextColor="White"
+        Background="#001346"/>
+        </StackLayout>
+
+        <!-- Фильтры -->
+        <Grid Grid.Row="2" 
+          Margin="10" 
+          HeightRequest="40"
+          ColumnDefinitions="*,*,*">
+            <Button Margin="5,0,5,0" 
+                Grid.Column="0" 
+                Padding="0"
+                CornerRadius="15"
+                Text="Год" 
+                Command="{Binding SetFiltrDateCommand}"/>
+            <Button Margin="5,0,5,0" 
+                Grid.Column="1" 
+                Padding="0"
+                CornerRadius="15"
+                Text="Студия" 
+                Command="{Binding SetFiltrStudioCommand}"/>
+            <Button Margin="5,0,5,0" 
+                Grid.Column="2" 
+                Padding="0"
+                CornerRadius="15"
+                Text="Жанр" 
+                Command="{Binding SetFiltrGenreCommand}"/>
         </Grid>
 
-        <Grid Grid.Row="1" Margin="10" HeightRequest="30"
-            ColumnDefinitions="*,*,*">
-            <Button Margin="5,0,5,0" Grid.Column="0" Padding="0"
-                    Text="Год" Command="{Binding SetFiltrDateCommand}"/>
-            <Button Margin="5,0,5,0" Grid.Column="1" Padding="0"
-                    Text="Студия" Command="{Binding SetFiltrStudioCommand}"/>
-            <Button Margin="5,0,5,0" Grid.Column="2" Padding="0"
-                    Text="Жанр" Command="{Binding SetFiltrGenreCommand}"/>
-        </Grid>
+        <!-- Основной контент -->
+        <ScrollView Grid.Row="3">
+            <Grid RowDefinitions="auto, auto, auto, auto">
+                <Label Text="Сериалы:" 
+                   Margin="25,10"
+                   FontAttributes="Bold"
+                   FontSize="20"
+                   Grid.Row="0"/>
 
-        <ScrollView Grid.Row="2">
-            <Grid  RowDefinitions="auto, auto, auto, auto">
-                <Label Text="Сериалы:" Margin="25"
-                       FontAttributes="Bold"
-                       FontSize="20"/>
-                
-                <CollectionView Grid.Row="1" ItemsSource="{Binding SerialsFiltr}">
+                <CollectionView Grid.Row="1" 
+                           ItemsSource="{Binding SerialsFiltr}"
+                           Margin="10,0,10,10">
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout Span="3" Orientation="Vertical" />
-                        <!-- Количество колонок -->
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame CornerRadius="10" BackgroundColor="Transparent"
-                   BorderColor="Transparent"
-                   Padding="0" Margin="5"
-                   HasShadow="False"
-                   IsClippedToBounds="True">
+                            <Frame CornerRadius="10" 
+                               BackgroundColor="Transparent"
+                               BorderColor="Transparent"
+                               Padding="0" 
+                               Margin="5"
+                               HeightRequest="180"
+                               HasShadow="False"
+                               IsClippedToBounds="True">
                                 <Frame.GestureRecognizers>
                                     <TapGestureRecognizer 
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CatalogFiltrViewModel}}, Path=TapMediaCommand}"
-                        CommandParameter="{Binding .}"/>
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CatalogFiltrViewModel}}, Path=TapMediaCommand}"
+                                    CommandParameter="{Binding .}"/>
                                 </Frame.GestureRecognizers>
                                 <Image Source="{Binding Preview}"
-                       Aspect="AspectFill"/>
+                                   Aspect="AspectFill"/>
                             </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
+                <Label Text="Фильмы:" 
+                   Margin="25,10"
+                   FontAttributes="Bold"
+                   FontSize="20" 
+                   Grid.Row="2"/>
+
                 <CollectionView Grid.Row="3"
-        ItemsSource="{Binding FilmsFiltr}">
+                           ItemsSource="{Binding FilmsFiltr}"
+                           Margin="10,0,10,10">
                     <CollectionView.ItemsLayout>
-                        <GridItemsLayout  Span="3" Orientation="Vertical" />
-                        <!-- Количество колонок -->
+                        <GridItemsLayout Span="3" Orientation="Vertical" />
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame CornerRadius="10" BackgroundColor="Transparent"
-BorderColor="Transparent"
-Padding="0" Margin="5"
-HasShadow="False"
-IsClippedToBounds="True">
+                            <Frame CornerRadius="10" 
+                               BackgroundColor="Transparent"
+                               BorderColor="Transparent"
+                               Padding="0" 
+                               Margin="5"
+                               HeightRequest="180"
+                               HasShadow="False"
+                               IsClippedToBounds="True">
                                 <Frame.GestureRecognizers>
                                     <TapGestureRecognizer 
-     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CatalogFiltrViewModel}}, Path=TapMediaCommand}"
-     CommandParameter="{Binding .}"/>
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CatalogFiltrViewModel}}, Path=TapMediaCommand}"
+                                    CommandParameter="{Binding .}"/>
                                 </Frame.GestureRecognizers>
                                 <Image Source="{Binding Preview}"
-    Aspect="AspectFill"/>
+                                   Aspect="AspectFill"/>
                             </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                <Label Text="Фильмы:" Margin="25"
-                       FontAttributes="Bold"
-                       FontSize="20" Grid.Row="2"/>
             </Grid>
         </ScrollView>
     </Grid>

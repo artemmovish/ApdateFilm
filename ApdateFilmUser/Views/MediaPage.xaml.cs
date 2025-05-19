@@ -122,7 +122,7 @@ public partial class MediaPage : ContentPage
         DeviceDisplay.Current.MainDisplayInfoChanged -= OnDisplayInfoChanged;
     }
 
-    private async void Button_Clicked(object sender, EventArgs e)
+    private async void GoBack_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("../");
     }
@@ -162,11 +162,99 @@ public partial class MediaPage : ContentPage
                  new Dictionary<string, object> { { "director", MediaItem.Directors } });
     }
 
-    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    protected override async void OnNavigatedTo(NavigatedToEventArgs args)
     {
-        base.OnNavigatedTo(args);
-        BindingContext = MediaItem;
-        InitializeFavorite();
-        TrailerView.HeightRequest = 380;
+        try
+        {
+            base.OnNavigatedTo(args);
+
+            if (MediaItem == null)
+            {
+                await Shell.Current.DisplayAlert("Ошибка", "Данные медиа не загружены", "OK");
+                await Shell.Current.GoToAsync("..");
+                return;
+            }
+
+            BindingContext = MediaItem;
+
+            // Настройка интерфейса в зависимости от типа контента
+            if (GoBack is View goBackView)
+            {
+                Grid.SetColumnSpan(goBackView, MediaItem.Type == 0 ? 2 : 1);
+            }
+            SelectSeries.IsVisible = MediaItem.Type != 0;
+
+            if (ApiClient.GetToken() != string.Empty)
+            {
+                List<Review> reviews = new List<Review>();
+                var user = await AuthServiec.GetProfileAsync();
+
+                foreach (var item in MediaItem.Review)
+                {
+                    if (user.id == item.User.id)
+                    {
+                        reviews.Add(item);
+                    }
+                }
+
+                MyReviewsCollection.ItemsSource = reviews;
+            }
+
+            // Инициализация состояния "Избранное"
+            await InitializeFavorite();
+
+            // Настройка размера трейлера
+            TrailerView.HeightRequest = DeviceInfo.Platform == DevicePlatform.Android ? 380 : 350;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Ошибка в OnNavigatedTo: {ex.Message}");
+            await Shell.Current.DisplayAlert("Ошибка", "Не удалось загрузить данные", "OK");
+        }
+    }
+
+    private async void SelectSeries_Clicked(object sender, EventArgs e)
+    {
+        List<Series> series = await MediaServiec.GetSeriesAsync(MediaItem.Id);
+
+        // Создаем список названий для отображения
+        var seriesTitles = series.Select(s => $"Серия {s.series_number}").ToArray();
+
+        // Показываем диалог выбора
+        var selectedTitle = await DisplayActionSheet("Выберите серию", "Отмена", null, seriesTitles);
+
+        // Если пользователь не нажал "Отмена" и выбрал серию
+        if (selectedTitle != null && selectedTitle != "Отмена")
+        {
+            // Находим индекс выбранной серии
+            var selectedIndex = Array.IndexOf(seriesTitles, selectedTitle);
+            var selectedSeries = series[selectedIndex];
+
+            MediaItem.ContentURL = selectedSeries.Url;
+            BindingContext = null;
+            BindingContext = MediaItem;
+        }
+    }
+
+    private void DeleteRewiews_Clicked(object sender, EventArgs e)
+    {
+        var button = (ImageButton)sender;
+
+        if (button.BindingContext is Review reviewToDelete)
+        {
+            // Удаляем из коллекции
+            if (MyReviewsCollection.ItemsSource is IList<Review> reviews)
+            {
+                reviews.Remove(reviewToDelete);
+
+                MyReviewsCollection.ItemsSource = null;
+                MyReviewsCollection.ItemsSource = reviews;
+
+                MediaItem.Review.Remove(reviewToDelete);
+
+                BindingContext = null;
+                BindingContext = MediaItem;
+            }
+        }
     }
 }
