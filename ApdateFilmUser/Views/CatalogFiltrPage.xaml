@@ -43,6 +43,7 @@
         Padding="5"
         CornerRadius="15"
         TextColor="White"
+                    Clicked="Button_Clicked"
         Background="Transparent"/>
             <Button Text="Категории"
         WidthRequest="100"

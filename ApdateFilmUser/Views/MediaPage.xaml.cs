@@ -130,7 +130,9 @@ public partial class MediaPage : ContentPage
     private async void Button_Clicked_1(object sender, EventArgs e)
     {
         MediaServiec.AddReviewAsync(MediaItem.Id, ReviewEntry.Text, _selectedRating);
-        MediaItem = await MediaServiec.GetMediaAsync(MediaItem.Id);
+        var newMedia = await MediaServiec.GetMediaAsync(MediaItem.Id);
+        MediaItem.Review = newMedia.Review;
+        MyReviewsInit();
         BindingContext = MediaItem;
     }
 
@@ -184,21 +186,7 @@ public partial class MediaPage : ContentPage
             }
             SelectSeries.IsVisible = MediaItem.Type != 0;
 
-            if (ApiClient.GetToken() != string.Empty)
-            {
-                List<Review> reviews = new List<Review>();
-                var user = await AuthServiec.GetProfileAsync();
-
-                foreach (var item in MediaItem.Review)
-                {
-                    if (user.id == item.User.id)
-                    {
-                        reviews.Add(item);
-                    }
-                }
-
-                MyReviewsCollection.ItemsSource = reviews;
-            }
+            MyReviewsInit();
 
             // Инициализация состояния "Избранное"
             await InitializeFavorite();
@@ -210,6 +198,25 @@ public partial class MediaPage : ContentPage
         {
             Debug.WriteLine($"Ошибка в OnNavigatedTo: {ex.Message}");
             await Shell.Current.DisplayAlert("Ошибка", "Не удалось загрузить данные", "OK");
+        }
+    }
+
+    private async void MyReviewsInit()
+    {
+        if (ApiClient.GetToken() != string.Empty)
+        {
+            List<Review> reviews = new List<Review>();
+            var user = await AuthServiec.GetProfileAsync();
+
+            foreach (var item in MediaItem.Review)
+            {
+                if (user.id == item.User.id)
+                {
+                    reviews.Add(item);
+                }
+            }
+
+            MyReviewsCollection.ItemsSource = reviews;
         }
     }
 
@@ -236,7 +243,7 @@ public partial class MediaPage : ContentPage
         }
     }
 
-    private void DeleteRewiews_Clicked(object sender, EventArgs e)
+    private async void DeleteRewiews_Clicked(object sender, EventArgs e)
     {
         var button = (ImageButton)sender;
 
@@ -245,6 +252,12 @@ public partial class MediaPage : ContentPage
             // Удаляем из коллекции
             if (MyReviewsCollection.ItemsSource is IList<Review> reviews)
             {
+                if (!await MediaServiec.DeleteReviewAsync(reviewToDelete.Id)) 
+                {
+                    return;
+                }
+                
+
                 reviews.Remove(reviewToDelete);
 
                 MyReviewsCollection.ItemsSource = null;

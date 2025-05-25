@@ -186,27 +186,6 @@ namespace ApdateFilmUser.Servieces
             }
             return null;
         }
-
-        //public static async Task<User> DeleteToFavoriteAsync(int id)
-        //{
-        //    try
-        //    {
-        //        var reqwest = new { media_id = id };
-
-        //        var userResponse = await ApiClient.DeleteAsync($"api/favorites/{id}");
-
-        //        if (userResponse)
-        //        {
-        //            Debug.WriteLine("[Отладка] Ошибка: Пустой ответ от сервера.");
-        //            return null;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ApiClient.HandleException(ex);
-        //    }
-        //    return null;
-        //}
         public static async Task<bool> CheckFavoriteAsync(int id)
         {
             try
@@ -227,7 +206,6 @@ namespace ApdateFilmUser.Servieces
             }
             return false;
         }
-
         public static async Task DeleteFromFavoriteAsync(int id)
         {
             try
@@ -267,6 +245,13 @@ namespace ApdateFilmUser.Servieces
             }
             return false;
         }
+
+        public static async Task<bool> DeleteReviewAsync(int id)
+        {
+            var checkResponse = await ApiClient.DeleteAsync($"api/reviews/{id}");
+            return checkResponse;
+        }
+
         public static async Task<List<FavoriteMedia>> GetMediaFavoriteAsync()
         {
             try

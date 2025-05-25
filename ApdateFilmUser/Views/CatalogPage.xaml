@@ -28,8 +28,6 @@
             <Grid>
                 <Label Text="SmotriKino" Margin="10,10,0,0"
                FontSize="25" FontAttributes="Italic"/>
-                <Image Source="search.png" Margin="0,0,10,10"
-               HorizontalOptions="End"/>
                 <StackLayout Orientation="Horizontal"
                      Margin="40,50,0,0"
                      Spacing="10"
